@@ -1,0 +1,2941 @@
+# Reflecto（观己）实施计划
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** 构建一个面向中文用户的个人待办打卡网站，包含日程、恒例、月度三个模块，采用自然绿意设计风格，数据本地存储，部署到 GitHub Pages。
+
+**Architecture:** 单文件 HTML 应用，使用 CSS 变量管理主题，JavaScript 模块化组织功能，localStorage 持久化数据，Canvas 绘制图表。
+
+**Tech Stack:** HTML5, CSS3, JavaScript (ES6+), Canvas API, localStorage
+
+---
+
+## 文件结构
+
+```
+reflecto/
+├── index.html          # 主应用文件（包含所有 HTML/CSS/JS）
+├── manifest.json       # PWA 配置（可选）
+├── .gitignore         # Git 忽略文件
+└── docs/              # 文档目录
+    ├── superpowers/
+    │   ├── specs/     # 设计文档
+    │   └── plans/     # 实施计划
+    └── README.md      # 项目说明
+```
+
+---
+
+## 任务分解
+
+### Task 1: 项目初始化与基础结构
+
+**Files:**
+- Create: `index.html`
+- Create: `.gitignore`
+
+- [ ] **Step 1: 创建基础 HTML 结构**
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>观己 Reflecto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS 变量和基础样式将在后续步骤添加 */
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- 应用内容将在这里构建 -->
+    </div>
+    <script>
+        // JavaScript 代码将在后续步骤添加
+    </script>
+</body>
+</html>
+```
+
+- [ ] **Step 2: 创建 .gitignore 文件**
+
+```
+# 依赖
+node_modules/
+
+# 构建产物
+dist/
+build/
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 编辑器配置
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# 调试日志
+*.log
+npm-debug.log*
+
+# 本地开发
+.superpowers/
+```
+
+- [ ] **Step 3: 初始化 Git 并提交**
+
+```bash
+git add index.html .gitignore
+git commit -m "chore: 初始化项目结构"
+```
+
+---
+
+### Task 2: CSS 变量与基础样式系统
+
+**Files:**
+- Modify: `index.html` (添加 CSS 变量和基础样式)
+
+- [ ] **Step 1: 定义 CSS 变量**
+
+在 `<style>` 标签中添加：
+
+```css
+:root {
+    /* 主色调 - 自然绿意 */
+    --color-primary: #4a7c59;
+    --color-primary-light: #7ab68a;
+    --color-primary-lighter: #a8d5b8;
+    --color-primary-bg: #f5f8f5;
+    --color-card-bg: #ffffff;
+
+    /* 文字颜色 */
+    --color-text-primary: #2d5a2d;
+    --color-text-secondary: #4a7c59;
+    --color-text-muted: #7ab68a;
+    --color-text-disabled: #c4d8c4;
+
+    /* 功能色 */
+    --color-danger: #e88a8a;
+    --color-danger-bg: #fef0f0;
+
+    /* 字体 */
+    --font-serif: 'Zen Old Mincho', serif;
+    --font-sans: 'Noto Sans SC', sans-serif;
+
+    /* 圆角 */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 20px;
+
+    /* 阴影 */
+    --shadow-sm: 0 1px 4px rgba(45, 90, 45, 0.06);
+    --shadow-md: 0 2px 12px rgba(45, 90, 45, 0.08);
+    --shadow-lg: 0 4px 16px rgba(45, 90, 45, 0.1);
+
+    /* 间距 */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+}
+```
+
+- [ ] **Step 2: 添加全局基础样式**
+
+```css
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--color-text-primary);
+    background-color: var(--color-primary-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-primary-lighter);
+    border-radius: 2px;
+}
+
+/* 按钮基础样式 */
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+/* 输入框基础样式 */
+input, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+}
+```
+
+- [ ] **Step 3: 提交 CSS 变量和基础样式**
+
+```bash
+git add index.html
+git commit -m "feat: 添加 CSS 变量和基础样式系统"
+```
+
+---
+
+### Task 3: 应用布局与底部导航栏
+
+**Files:**
+- Modify: `index.html` (添加 HTML 结构和导航栏样式)
+
+- [ ] **Step 1: 创建应用 HTML 结构**
+
+在 `<body>` 中的 `<div id="app">` 内添加：
+
+```html
+<!-- 顶部标语栏 -->
+<header id="slogan-bar" class="slogan-bar">
+    <span id="slogan-text">一期一会，珍惜当下</span>
+</header>
+
+<!-- 主内容区 -->
+<main id="main-content" class="main-content">
+    <!-- 日程模块 -->
+    <section id="schedule-module" class="module active">
+        <!-- 日程内容将在后续任务中添加 -->
+    </section>
+
+    <!-- 恒例模块 -->
+    <section id="routine-module" class="module">
+        <!-- 恒例内容将在后续任务中添加 -->
+    </section>
+
+    <!-- 月度模块 -->
+    <section id="monthly-module" class="module">
+        <!-- 月度内容将在后续任务中添加 -->
+    </section>
+</main>
+
+<!-- 底部导航栏 -->
+<nav id="bottom-nav" class="bottom-nav">
+    <button class="nav-item active" data-module="schedule">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span class="nav-label">日程</span>
+    </button>
+    <button class="nav-item" data-module="routine">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 11 12 14 22 4"></polyline>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+        </svg>
+        <span class="nav-label">恒例</span>
+    </button>
+    <button class="nav-item" data-module="monthly">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+            <path d="M8 14h.01"></path>
+            <path d="M12 14h.01"></path>
+            <path d="M16 14h.01"></path>
+            <path d="M8 18h.01"></path>
+            <path d="M12 18h.01"></path>
+            <path d="M16 18h.01"></path>
+        </svg>
+        <span class="nav-label">月度</span>
+    </button>
+</nav>
+```
+
+- [ ] **Step 2: 添加标语栏样式**
+
+```css
+.slogan-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--color-card-bg);
+    padding: var(--space-4) var(--space-5);
+    text-align: center;
+    border-bottom: 1px solid var(--color-primary-lighter);
+}
+
+.slogan-bar span {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    letter-spacing: 2px;
+}
+```
+
+- [ ] **Step 3: 添加主内容区样式**
+
+```css
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 80px; /* 为底部导航栏留空间 */
+}
+
+.module {
+    display: none;
+    padding: var(--space-4);
+}
+
+.module.active {
+    display: block;
+}
+```
+
+- [ ] **Step 4: 添加底部导航栏样式**
+
+```css
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background-color: var(--color-card-bg);
+    display: flex;
+    justify-content: space-around;
+    padding: var(--space-3) 0;
+    padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--color-primary-lighter);
+    box-shadow: 0 -2px 12px rgba(45, 90, 45, 0.06);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-4);
+    color: var(--color-text-muted);
+    transition: color 0.2s ease;
+}
+
+.nav-item.active {
+    color: var(--color-primary);
+}
+
+.nav-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.nav-label {
+    font-size: 11px;
+    font-family: var(--font-serif);
+}
+```
+
+- [ ] **Step 5: 添加模块切换逻辑**
+
+在 `<script>` 标签中添加：
+
+```javascript
+// 模块切换
+document.addEventListener('DOMContentLoaded', function() {
+    const navItems = document.querySelectorAll('.nav-item');
+    const modules = document.querySelectorAll('.module');
+
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const targetModule = this.dataset.module;
+
+            // 更新导航栏状态
+            navItems.forEach(nav => nav.classList.remove('active'));
+            this.classList.add('active');
+
+            // 切换模块显示
+            modules.forEach(module => module.classList.remove('active'));
+            document.getElementById(`${targetModule}-module`).classList.add('active');
+
+            // 更新标语
+            updateSlogan();
+        });
+    });
+});
+
+// 标语库
+const slogans = [
+    '一期一会，珍惜当下',
+    '日日是好日',
+    '知行合一',
+    '慢慢来，比较快',
+    '但行好事，莫问前程',
+    '活在当下',
+    '万事皆可期',
+    '心之所向，素履以往',
+    '不忘初心',
+    '且听风吟',
+    '月有阴晴圆缺',
+    '山高水长',
+    '宁静致远',
+    '厚积薄发',
+    '水滴石穿',
+    '千里之行，始于足下',
+    '学无止境',
+    '自强不息',
+    '上善若水',
+    '大道至简',
+    '观自在',
+    '正心诚意',
+    '格物致知',
+    '慎独',
+    '日拱一卒',
+    '功不唐捐',
+    '玉汝于成',
+    '行远自迩',
+    '登高自卑',
+    '慎终如始'
+];
+
+let lastSloganIndex = -1;
+
+function updateSlogan() {
+    let newIndex;
+    do {
+        newIndex = Math.floor(Math.random() * slogans.length);
+    } while (newIndex === lastSloganIndex && slogans.length > 1);
+
+    lastSloganIndex = newIndex;
+    document.getElementById('slogan-text').textContent = slogans[newIndex];
+}
+```
+
+- [ ] **Step 6: 提交布局和导航栏**
+
+```bash
+git add index.html
+git commit -m "feat: 添加应用布局和底部导航栏"
+```
+
+---
+
+### Task 4: 日程模块 - 日期选择器
+
+**Files:**
+- Modify: `index.html` (添加日期选择器 HTML 和样式)
+
+- [ ] **Step 1: 添加日期选择器 HTML**
+
+在 `#schedule-module` 中添加：
+
+```html
+<!-- 日期选择器 -->
+<div class="date-picker">
+    <div class="date-scroll" id="date-scroll">
+        <!-- 日期项将通过 JavaScript 动态生成 -->
+    </div>
+    <button class="calendar-btn" id="calendar-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+    </button>
+</div>
+```
+
+- [ ] **Step 2: 添加日期选择器样式**
+
+```css
+.date-picker {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+}
+
+.date-scroll {
+    flex: 1;
+    display: flex;
+    gap: var(--space-2);
+    overflow-x: auto;
+    padding: var(--space-2) 0;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+.date-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.date-item {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-3);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-card-bg);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    scroll-snap-align: center;
+    min-width: 56px;
+}
+
+.date-item:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.date-item.active {
+    background-color: rgba(74, 124, 89, 0.15);
+    border: 2px solid var(--color-primary);
+    box-shadow: var(--shadow-md);
+}
+
+.date-weekday {
+    font-size: 11px;
+    color: var(--color-text-muted);
+}
+
+.date-day {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+
+.date-item.active .date-weekday {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.date-item.active .date-day {
+    color: var(--color-text-primary);
+}
+
+.calendar-btn {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-lg);
+    background-color: var(--color-card-bg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    transition: all 0.2s ease;
+}
+
+.calendar-btn:hover {
+    box-shadow: var(--shadow-md);
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.calendar-btn svg {
+    width: 20px;
+    height: 20px;
+}
+```
+
+- [ ] **Step 3: 添加日期选择器 JavaScript 逻辑**
+
+```javascript
+// 日期选择器
+class DatePicker {
+    constructor() {
+        this.selectedDate = new Date();
+        this.scrollContainer = document.getElementById('date-scroll');
+        this.init();
+    }
+
+    init() {
+        this.renderDates();
+        this.scrollToSelected();
+    }
+
+    renderDates() {
+        const today = new Date();
+        const dates = [];
+
+        // 生成过去和未来的日期（无限延伸效果）
+        for (let i = -30; i <= 30; i++) {
+            const date = new Date(today);
+            date.setDate(today.getDate() + i);
+            dates.push(date);
+        }
+
+        this.scrollContainer.innerHTML = dates.map(date => {
+            const isActive = this.isSameDay(date, this.selectedDate);
+            const weekday = this.getWeekday(date.getDay());
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+
+            return `
+                <div class="date-item ${isActive ? 'active' : ''}"
+                     data-date="${date.toISOString()}"
+                     onclick="datePicker.selectDate('${date.toISOString()}')">
+                    <span class="date-weekday">${weekday}</span>
+                    <span class="date-day">${month}.${day}</span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    selectDate(dateString) {
+        this.selectedDate = new Date(dateString);
+        this.renderDates();
+        this.scrollToSelected();
+        // 更新待办列表显示
+        if (typeof todoList !== 'undefined') {
+            todoList.render();
+        }
+    }
+
+    scrollToSelected() {
+        const activeItem = this.scrollContainer.querySelector('.date-item.active');
+        if (activeItem) {
+            activeItem.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
+        }
+    }
+
+    getWeekday(day) {
+        const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+        return weekdays[day];
+    }
+
+    isSameDay(date1, date2) {
+        return date1.getFullYear() === date2.getFullYear() &&
+               date1.getMonth() === date2.getMonth() &&
+               date1.getDate() === date2.getDate();
+    }
+
+    getSelectedDate() {
+        return this.selectedDate;
+    }
+}
+
+// 初始化日期选择器
+let datePicker;
+document.addEventListener('DOMContentLoaded', function() {
+    datePicker = new DatePicker();
+});
+```
+
+- [ ] **Step 4: 提交日期选择器**
+
+```bash
+git add index.html
+git commit -m "feat: 添加日期选择器（无限延伸滚筒）"
+```
+
+---
+
+### Task 5: 日程模块 - 待办事项列表与添加功能
+
+**Files:**
+- Modify: `index.html` (添加待办列表 HTML、样式和 JavaScript)
+
+- [ ] **Step 1: 添加待办列表 HTML**
+
+在 `#schedule-module` 中（日期选择器之后）添加：
+
+```html
+<!-- 待办事项列表 -->
+<div class="todo-list" id="todo-list">
+    <!-- 待办项将通过 JavaScript 动态生成 -->
+</div>
+
+<!-- 今日完成度 -->
+<div class="progress-section" id="progress-section">
+    <div class="progress-header">
+        <span class="progress-label">今日完成度</span>
+        <span class="progress-percent" id="progress-percent">0%</span>
+    </div>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+</div>
+
+<!-- 事件耗时饼状图 -->
+<div class="chart-section" id="chart-section">
+    <div class="chart-title">事件耗时占比</div>
+    <div class="chart-container">
+        <canvas id="pie-chart" width="120" height="120"></canvas>
+        <div class="chart-legend" id="chart-legend"></div>
+    </div>
+</div>
+
+<!-- 添加待办悬浮按钮 -->
+<button class="fab" id="add-todo-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
+</button>
+
+<!-- 添加/编辑待办模态框 -->
+<div class="modal-overlay" id="todo-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 id="modal-title">添加待办</h3>
+            <button class="modal-close" onclick="todoModal.close()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">事件描述 *</label>
+                <input type="text" class="form-input" id="todo-input" placeholder="请输入事件描述" maxlength="50">
+            </div>
+            <div class="form-group">
+                <label class="form-label">截止时间（选填）</label>
+                <div class="time-picker">
+                    <select class="time-select" id="deadline-hour">
+                        <!-- 时选项将通过 JavaScript 生成 -->
+                    </select>
+                    <span class="time-separator">:</span>
+                    <select class="time-select" id="deadline-minute">
+                        <!-- 分选项将通过 JavaScript 生成 -->
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">提前提醒（选填）</label>
+                <div class="time-picker">
+                    <select class="time-select" id="reminder-hour">
+                        <!-- 时选项将通过 JavaScript 生成 -->
+                    </select>
+                    <span class="time-separator">:</span>
+                    <select class="time-select" id="reminder-minute">
+                        <!-- 分选项将通过 JavaScript 生成 -->
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="todoModal.close()">取消</button>
+            <button class="btn btn-primary" id="todo-submit-btn">添加</button>
+        </div>
+    </div>
+</div>
+
+<!-- 完成待办耗时填写模态框 -->
+<div class="modal-overlay" id="complete-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>完成事件</h3>
+        </div>
+        <div class="modal-body">
+            <div class="complete-event-name" id="complete-event-name"></div>
+            <div class="form-group">
+                <label class="form-label">该事件耗时</label>
+                <div class="duration-options">
+                    <button class="duration-btn" data-duration="15">15分钟</button>
+                    <button class="duration-btn" data-duration="30">30分钟</button>
+                    <button class="duration-btn" data-duration="45">45分钟</button>
+                    <button class="duration-btn" data-duration="60">60分钟</button>
+                    <button class="duration-btn custom-duration-btn">自定义耗时</button>
+                </div>
+                <div class="custom-duration-input" id="custom-duration-input" style="display: none;">
+                    <input type="number" class="form-input" id="custom-duration" placeholder="请输入" min="1">
+                    <span class="duration-unit">分钟</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="completeModal.close()">取消</button>
+            <button class="btn btn-primary" id="complete-confirm-btn">确认完成</button>
+        </div>
+    </div>
+</div>
+
+<!-- 删除确认模态框 -->
+<div class="modal-overlay" id="delete-modal">
+    <div class="modal modal-sm">
+        <div class="modal-body">
+            <div class="delete-icon">🗑️</div>
+            <p class="delete-message">确定要删除这个待办吗？</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="deleteModal.close()">取消</button>
+            <button class="btn btn-danger" id="delete-confirm-btn">删除</button>
+        </div>
+    </div>
+</div>
+```
+
+- [ ] **Step 2: 添加待办列表样式**
+
+```css
+/* 待办列表 */
+.todo-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-primary-lighter);
+    border-radius: var(--radius-lg);
+    transition: all 0.3s ease;
+}
+
+.todo-item.completed {
+    opacity: 0.7;
+    background-color: var(--color-primary-bg);
+}
+
+.todo-checkbox {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--color-primary-lighter);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.todo-checkbox:hover {
+    border-color: var(--color-primary);
+}
+
+.todo-checkbox.checked {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.todo-checkbox.checked::after {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) translateY(-1px);
+}
+
+.todo-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.todo-title {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.todo-item.completed .todo-title {
+    text-decoration: line-through;
+    color: var(--color-text-muted);
+}
+
+.todo-meta {
+    font-size: 12px;
+    color: var(--color-text-muted);
+}
+
+.todo-actions {
+    display: flex;
+    gap: var(--space-2);
+    flex-shrink: 0;
+}
+
+.todo-action {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.todo-action:hover {
+    opacity: 1;
+}
+
+.todo-action svg {
+    width: 16px;
+    height: 16px;
+}
+
+.todo-action.edit {
+    color: var(--color-primary-light);
+}
+
+.todo-action.delete {
+    color: var(--color-danger);
+}
+
+/* 进度条 */
+.progress-section {
+    background-color: var(--color-card-bg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    margin-bottom: var(--space-5);
+    box-shadow: var(--shadow-sm);
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3);
+}
+
+.progress-label {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    color: var(--color-text-secondary);
+}
+
+.progress-percent {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.progress-bar {
+    height: 8px;
+    background-color: var(--color-primary-bg);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--color-primary);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+/* 饼状图 */
+.chart-section {
+    background-color: var(--color-card-bg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    margin-bottom: var(--space-5);
+    box-shadow: var(--shadow-sm);
+}
+
+.chart-title {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-bottom: var(--space-4);
+    letter-spacing: 1px;
+}
+
+.chart-container {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+}
+
+#pie-chart {
+    flex-shrink: 0;
+}
+
+.chart-legend {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* 悬浮按钮 */
+.fab {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-xl);
+    background-color: var(--color-primary);
+    color: white;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    transition: all 0.2s ease;
+}
+
+.fab:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(74, 124, 89, 0.35);
+}
+
+.fab svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* 模态框 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(45, 90, 45, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background-color: var(--color-card-bg);
+    border-radius: var(--radius-2xl);
+    width: 90%;
+    max-width: 400px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.9);
+    transition: transform 0.2s ease;
+}
+
+.modal-overlay.active .modal {
+    transform: scale(1);
+}
+
+.modal-sm {
+    max-width: 320px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-5) var(--space-5) var(--space-4);
+}
+
+.modal-header h3 {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.modal-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--color-text-muted);
+    transition: background-color 0.2s ease;
+}
+
+.modal-close:hover {
+    background-color: var(--color-primary-bg);
+}
+
+.modal-body {
+    padding: 0 var(--space-5) var(--space-4);
+}
+
+.modal-footer {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5) var(--space-5);
+}
+
+.form-group {
+    margin-bottom: var(--space-4);
+}
+
+.form-label {
+    display: block;
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+}
+
+.form-input {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--color-primary-bg);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 14px;
+    color: var(--color-text-primary);
+    transition: all 0.2s ease;
+}
+
+.form-input:focus {
+    box-shadow: 0 0 0 2px var(--color-primary-lighter);
+}
+
+.form-input::placeholder {
+    color: var(--color-text-disabled);
+}
+
+.time-picker {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.time-select {
+    flex: 1;
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--color-primary-bg);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 14px;
+    color: var(--color-text-primary);
+    cursor: pointer;
+}
+
+.time-separator {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.btn {
+    flex: 1;
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    font-family: var(--font-serif);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #3d6b4a;
+}
+
+.btn-secondary {
+    background-color: var(--color-primary-bg);
+    color: var(--color-primary);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-primary-lighter);
+}
+
+.btn-danger {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #d67a7a;
+}
+
+/* 完成事件相关 */
+.complete-event-name {
+    text-align: center;
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-5);
+    padding: var(--space-4);
+    background-color: var(--color-primary-bg);
+    border-radius: var(--radius-lg);
+}
+
+.duration-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+}
+
+.duration-btn {
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--color-primary-bg);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-family: var(--font-serif);
+    font-size: 14px;
+    color: var(--color-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.duration-btn:hover {
+    background-color: var(--color-primary-lighter);
+}
+
+.duration-btn.selected {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.custom-duration-input {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.custom-duration-input .form-input {
+    flex: 1;
+}
+
+.duration-unit {
+    font-size: 14px;
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+}
+
+.delete-icon {
+    text-align: center;
+    font-size: 48px;
+    margin-bottom: var(--space-4);
+}
+
+.delete-message {
+    text-align: center;
+    font-family: var(--font-serif);
+    font-size: 16px;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-4);
+}
+```
+
+- [ ] **Step 3: 添加待办管理 JavaScript 逻辑**
+
+```javascript
+// 待办管理
+class TodoList {
+    constructor() {
+        this.todos = this.loadTodos();
+        this.currentEditId = null;
+        this.currentCompleteId = null;
+        this.currentDeleteId = null;
+        this.init();
+    }
+
+    init() {
+        this.render();
+        this.bindEvents();
+        this.initTimeSelectors();
+    }
+
+    loadTodos() {
+        const data = localStorage.getItem('reflecto_todos');
+        return data ? JSON.parse(data) : [];
+    }
+
+    saveTodos() {
+        localStorage.setItem('reflecto_todos', JSON.stringify(this.todos));
+    }
+
+    getTodosForDate(date) {
+        const dateString = this.formatDate(date);
+        return this.todos.filter(todo => todo.date === dateString);
+    }
+
+    formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    addTodo(title, deadlineHour, deadlineMinute, reminderHour, reminderMinute) {
+        const selectedDate = datePicker.getSelectedDate();
+        const newTodo = {
+            id: Date.now().toString(),
+            date: this.formatDate(selectedDate),
+            title: title,
+            deadlineHour: deadlineHour || null,
+            deadlineMinute: deadlineMinute || null,
+            reminderHour: reminderHour || null,
+            reminderMinute: reminderMinute || null,
+            completed: false,
+            duration: null,
+            createdAt: new Date().toISOString()
+        };
+
+        this.todos.push(newTodo);
+        this.saveTodos();
+        this.render();
+    }
+
+    editTodo(id, title, deadlineHour, deadlineMinute, reminderHour, reminderMinute) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo) {
+            todo.title = title;
+            todo.deadlineHour = deadlineHour || null;
+            todo.deadlineMinute = deadlineMinute || null;
+            todo.reminderHour = reminderHour || null;
+            todo.reminderMinute = reminderMinute || null;
+            this.saveTodos();
+            this.render();
+        }
+    }
+
+    deleteTodo(id) {
+        this.todos = this.todos.filter(t => t.id !== id);
+        this.saveTodos();
+        this.render();
+    }
+
+    completeTodo(id, duration) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo) {
+            todo.completed = true;
+            todo.duration = duration || null;
+            this.saveTodos();
+            this.render();
+        }
+    }
+
+    render() {
+        const selectedDate = datePicker.getSelectedDate();
+        const todos = this.getTodosForDate(selectedDate);
+        const todoList = document.getElementById('todo-list');
+
+        // 按完成状态排序：未完成在前，已完成在后
+        const sortedTodos = [...todos].sort((a, b) => {
+            if (a.completed === b.completed) return 0;
+            return a.completed ? 1 : -1;
+        });
+
+        todoList.innerHTML = sortedTodos.map(todo => `
+            <div class="todo-item ${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
+                <div class="todo-checkbox ${todo.completed ? 'checked' : ''}"
+                     onclick="todoList.toggleComplete('${todo.id}')"></div>
+                <div class="todo-content">
+                    <div class="todo-title">${todo.title}</div>
+                    <div class="todo-meta">
+                        ${todo.completed && todo.duration ? `耗时 ${todo.duration}min` :
+                          todo.deadlineHour !== null ? `截止 ${String(todo.deadlineHour).padStart(2, '0')}:${String(todo.deadlineMinute).padStart(2, '0')}` : ''}
+                    </div>
+                </div>
+                <div class="todo-actions">
+                    <div class="todo-action edit" onclick="todoList.openEditModal('${todo.id}')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                    </div>
+                    <div class="todo-action delete" onclick="todoList.openDeleteModal('${todo.id}')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        // 更新完成度
+        this.updateProgress(todos);
+        // 更新饼状图
+        this.updatePieChart(todos);
+    }
+
+    toggleComplete(id) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo && !todo.completed) {
+            this.currentCompleteId = id;
+            document.getElementById('complete-event-name').textContent = todo.title;
+            completeModal.open();
+        }
+    }
+
+    openEditModal(id) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo) {
+            this.currentEditId = id;
+            document.getElementById('modal-title').textContent = '编辑待办';
+            document.getElementById('todo-input').value = todo.title;
+            document.getElementById('todo-submit-btn').textContent = '保存';
+
+            if (todo.deadlineHour !== null) {
+                document.getElementById('deadline-hour').value = todo.deadlineHour;
+                document.getElementById('deadline-minute').value = todo.deadlineMinute;
+            }
+            if (todo.reminderHour !== null) {
+                document.getElementById('reminder-hour').value = todo.reminderHour;
+                document.getElementById('reminder-minute').value = todo.reminderMinute;
+            }
+
+            todoModal.open();
+        }
+    }
+
+    openDeleteModal(id) {
+        this.currentDeleteId = id;
+        deleteModal.open();
+    }
+
+    updateProgress(todos) {
+        const total = todos.length;
+        const completed = todos.filter(t => t.completed).length;
+        const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+        document.getElementById('progress-percent').textContent = `${percent}%`;
+        document.getElementById('progress-fill').style.width = `${percent}%`;
+    }
+
+    updatePieChart(todos) {
+        const canvas = document.getElementById('pie-chart');
+        const ctx = canvas.getContext('2d');
+        const legend = document.getElementById('chart-legend');
+
+        // 只统计已完成且有耗时的事件
+        const completedWithDuration = todos.filter(t => t.completed && t.duration);
+
+        if (completedWithDuration.length === 0) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            legend.innerHTML = '<div class="legend-item" style="color: var(--color-text-muted);">暂无数据</div>';
+            return;
+        }
+
+        // 计算总耗时
+        const totalDuration = completedWithDuration.reduce((sum, t) => sum + t.duration, 0);
+
+        // 颜色方案
+        const colors = [
+            '#4a7c59', '#7ab68a', '#a8d5b8', '#2d5a2d',
+            '#6b9b7a', '#8fc49e', '#b5dcc0', '#3d6b4a'
+        ];
+
+        // 绘制饼状图
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let startAngle = -Math.PI / 2;
+
+        completedWithDuration.forEach((todo, index) => {
+            const sliceAngle = (todo.duration / totalDuration) * 2 * Math.PI;
+            const color = colors[index % colors.length];
+
+            ctx.beginPath();
+            ctx.moveTo(60, 60);
+            ctx.arc(60, 60, 55, startAngle, startAngle + sliceAngle);
+            ctx.fillStyle = color;
+            ctx.fill();
+
+            startAngle += sliceAngle;
+        });
+
+        // 更新图例
+        legend.innerHTML = completedWithDuration.map((todo, index) => {
+            const color = colors[index % colors.length];
+            const percent = Math.round((todo.duration / totalDuration) * 100);
+            return `
+                <div class="legend-item">
+                    <div class="legend-dot" style="background-color: ${color}"></div>
+                    <span>${todo.title} ${todo.duration}min (${percent}%)</span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    initTimeSelectors() {
+        const hourSelects = ['deadline-hour', 'reminder-hour'];
+        const minuteSelects = ['deadline-minute', 'reminder-minute'];
+
+        hourSelects.forEach(id => {
+            const select = document.getElementById(id);
+            select.innerHTML = '<option value="">时</option>';
+            for (let i = 0; i < 24; i++) {
+                select.innerHTML += `<option value="${i}">${String(i).padStart(2, '0')}</option>`;
+            }
+        });
+
+        minuteSelects.forEach(id => {
+            const select = document.getElementById(id);
+            select.innerHTML = '<option value="">分</option>';
+            for (let i = 0; i < 60; i++) {
+                select.innerHTML += `<option value="${i}">${String(i).padStart(2, '0')}</option>`;
+            }
+        });
+    }
+
+    bindEvents() {
+        // 添加待办按钮
+        document.getElementById('add-todo-btn').addEventListener('click', () => {
+            this.currentEditId = null;
+            document.getElementById('modal-title').textContent = '添加待办';
+            document.getElementById('todo-submit-btn').textContent = '添加';
+            document.getElementById('todo-input').value = '';
+            document.getElementById('deadline-hour').value = '';
+            document.getElementById('deadline-minute').value = '';
+            document.getElementById('reminder-hour').value = '';
+            document.getElementById('reminder-minute').value = '';
+            todoModal.open();
+        });
+
+        // 提交待办
+        document.getElementById('todo-submit-btn').addEventListener('click', () => {
+            const title = document.getElementById('todo-input').value.trim();
+            if (!title) {
+                alert('请输入事件描述');
+                return;
+            }
+
+            const deadlineHour = document.getElementById('deadline-hour').value;
+            const deadlineMinute = document.getElementById('deadline-minute').value;
+            const reminderHour = document.getElementById('reminder-hour').value;
+            const reminderMinute = document.getElementById('reminder-minute').value;
+
+            if (this.currentEditId) {
+                this.editTodo(
+                    this.currentEditId,
+                    title,
+                    deadlineHour !== '' ? parseInt(deadlineHour) : null,
+                    deadlineMinute !== '' ? parseInt(deadlineMinute) : null,
+                    reminderHour !== '' ? parseInt(reminderHour) : null,
+                    reminderMinute !== '' ? parseInt(reminderMinute) : null
+                );
+            } else {
+                this.addTodo(
+                    title,
+                    deadlineHour !== '' ? parseInt(deadlineHour) : null,
+                    deadlineMinute !== '' ? parseInt(deadlineMinute) : null,
+                    reminderHour !== '' ? parseInt(reminderHour) : null,
+                    reminderMinute !== '' ? parseInt(reminderMinute) : null
+                );
+            }
+
+            todoModal.close();
+        });
+
+        // 完成耗时选择
+        document.querySelectorAll('.duration-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.duration-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+
+                if (this.classList.contains('custom-duration-btn')) {
+                    document.getElementById('custom-duration-input').style.display = 'flex';
+                } else {
+                    document.getElementById('custom-duration-input').style.display = 'none';
+                }
+            });
+        });
+
+        // 确认完成
+        document.getElementById('complete-confirm-btn').addEventListener('click', () => {
+            const selectedBtn = document.querySelector('.duration-btn.selected');
+            let duration = null;
+
+            if (selectedBtn) {
+                if (selectedBtn.classList.contains('custom-duration-btn')) {
+                    const customInput = document.getElementById('custom-duration');
+                    duration = customInput.value ? parseInt(customInput.value) : null;
+                } else {
+                    duration = parseInt(selectedBtn.dataset.duration);
+                }
+            }
+
+            if (this.currentCompleteId) {
+                this.completeTodo(this.currentCompleteId, duration);
+            }
+
+            // 重置选择状态
+            document.querySelectorAll('.duration-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('custom-duration-input').style.display = 'none';
+            document.getElementById('custom-duration').value = '';
+
+            completeModal.close();
+        });
+
+        // 删除确认
+        document.getElementById('delete-confirm-btn').addEventListener('click', () => {
+            if (this.currentDeleteId) {
+                this.deleteTodo(this.currentDeleteId);
+            }
+            deleteModal.close();
+        });
+    }
+}
+
+// 模态框管理
+class Modal {
+    constructor(elementId) {
+        this.element = document.getElementById(elementId);
+    }
+
+    open() {
+        this.element.classList.add('active');
+    }
+
+    close() {
+        this.element.classList.remove('active');
+    }
+}
+
+// 初始化
+let todoList;
+let todoModal;
+let completeModal;
+let deleteModal;
+
+document.addEventListener('DOMContentLoaded', function() {
+    todoModal = new Modal('todo-modal');
+    completeModal = new Modal('complete-modal');
+    deleteModal = new Modal('delete-modal');
+    todoList = new TodoList();
+});
+```
+
+- [ ] **Step 4: 提交待办列表和添加功能**
+
+```bash
+git add index.html
+git commit -m "feat: 添加待办事项列表和添加/编辑/删除/完成功能"
+```
+
+---
+
+### Task 6: 恒例模块 - 表格与添加功能
+
+**Files:**
+- Modify: `index.html` (添加恒例模块 HTML、样式和 JavaScript)
+
+- [ ] **Step 1: 添加恒例模块 HTML**
+
+在 `#routine-module` 中添加：
+
+```html
+<!-- 周选择器 -->
+<div class="week-selector">
+    <button class="week-btn" id="prev-week">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+    </button>
+    <span class="week-range" id="week-range">06.10 ~ 06.16</span>
+    <button class="week-btn" id="next-week">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+    </button>
+</div>
+
+<!-- 恒例表格 -->
+<div class="routine-table" id="routine-table">
+    <div class="table-dates" id="table-dates">
+        <!-- 日期行将通过 JavaScript 生成 -->
+    </div>
+    <div class="table-content" id="table-content">
+        <!-- 表格内容将通过 JavaScript 生成 -->
+    </div>
+</div>
+
+<!-- 完成率折线图 -->
+<div class="line-chart-section">
+    <div class="chart-title">本周完成率趋势</div>
+    <div class="line-chart-container">
+        <canvas id="line-chart" width="300" height="150"></canvas>
+    </div>
+</div>
+
+<!-- 添加恒例悬浮按钮 -->
+<button class="fab" id="add-routine-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
+</button>
+
+<!-- 添加恒例模态框 -->
+<div class="modal-overlay" id="routine-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>添加恒例</h3>
+            <button class="modal-close" onclick="routineModal.close()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">事件描述 *（最多6个汉字）</label>
+                <input type="text" class="form-input" id="routine-input" placeholder="如：早起、背单词" maxlength="12">
+            </div>
+            <div class="form-group">
+                <label class="form-label">时间点 *</label>
+                <div class="time-picker">
+                    <select class="time-select" id="routine-hour">
+                        <!-- 时选项将通过 JavaScript 生成 -->
+                    </select>
+                    <span class="time-separator">:</span>
+                    <select class="time-select" id="routine-minute">
+                        <!-- 分选项将通过 JavaScript 生成 -->
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="routineModal.close()">取消</button>
+            <button class="btn btn-primary" id="routine-submit-btn">添加</button>
+        </div>
+    </div>
+</div>
+
+<!-- 删除恒例确认模态框 -->
+<div class="modal-overlay" id="routine-delete-modal">
+    <div class="modal modal-sm">
+        <div class="modal-body">
+            <div class="delete-icon">🗑️</div>
+            <p class="delete-message">确定要删除这个恒例吗？</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="routineDeleteModal.close()">取消</button>
+            <button class="btn btn-danger" id="routine-delete-confirm-btn">删除</button>
+        </div>
+    </div>
+</div>
+```
+
+- [ ] **Step 2: 添加恒例模块样式**
+
+```css
+/* 周选择器 */
+.week-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-5);
+    margin-bottom: var(--space-5);
+}
+
+.week-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--color-card-bg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    transition: all 0.2s ease;
+}
+
+.week-btn:hover {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.week-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.week-range {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+/* 恒例表格 */
+.routine-table {
+    background-color: var(--color-card-bg);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-5);
+}
+
+.table-dates {
+    display: grid;
+    grid-template-columns: 90px repeat(7, 1fr);
+    gap: 1px;
+    background-color: var(--color-primary-lighter);
+    padding: var(--space-3) 0;
+}
+
+.table-date {
+    text-align: center;
+    font-family: var(--font-serif);
+    font-size: 11px;
+    color: var(--color-text-muted);
+}
+
+.table-date .weekday {
+    margin-bottom: var(--space-1);
+}
+
+.table-date .day {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+
+.table-date.today {
+    color: var(--color-primary);
+}
+
+.table-date.today .day {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.table-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.table-row {
+    display: grid;
+    grid-template-columns: 90px repeat(7, 1fr);
+    gap: 1px;
+    background-color: var(--color-primary-lighter);
+    border-bottom: 1px solid var(--color-primary-lighter);
+}
+
+.table-row:last-child {
+    border-bottom: none;
+}
+
+.table-cell {
+    background-color: var(--color-card-bg);
+    padding: var(--space-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.table-cell.routine-info {
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.routine-name {
+    font-family: var(--font-serif);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    text-align: center;
+}
+
+.routine-time {
+    font-size: 10px;
+    color: var(--color-text-muted);
+}
+
+.routine-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-primary-lighter);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.routine-checkbox:hover {
+    border-color: var(--color-primary);
+}
+
+.routine-checkbox.checked {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.routine-checkbox.checked::after {
+    content: '';
+    display: block;
+    width: 5px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) translateY(-1px);
+}
+
+.routine-checkbox.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.routine-actions {
+    display: flex;
+    gap: var(--space-1);
+    position: absolute;
+    right: var(--space-2);
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.table-row:hover .routine-actions {
+    opacity: 1;
+}
+
+.routine-action {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-danger);
+}
+
+.routine-action svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* 折线图 */
+.line-chart-section {
+    background-color: var(--color-card-bg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-sm);
+}
+
+.line-chart-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+#line-chart {
+    min-width: 300px;
+}
+```
+
+- [ ] **Step 3: 添加恒例管理 JavaScript 逻辑**
+
+```javascript
+// 恒例管理
+class RoutineList {
+    constructor() {
+        this.routines = this.loadRoutines();
+        this.currentWeekStart = this.getWeekStart(new Date());
+        this.currentDeleteId = null;
+        this.init();
+    }
+
+    init() {
+        this.renderWeekSelector();
+        this.renderTable();
+        this.renderLineChart();
+        this.bindEvents();
+        this.initTimeSelectors();
+    }
+
+    loadRoutines() {
+        const data = localStorage.getItem('reflecto_routines');
+        return data ? JSON.parse(data) : [];
+    }
+
+    saveRoutines() {
+        localStorage.setItem('reflecto_routines', JSON.stringify(this.routines));
+    }
+
+    getWeekStart(date) {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+        d.setDate(diff);
+        d.setHours(0, 0, 0, 0);
+        return d;
+    }
+
+    getWeekDates(weekStart) {
+        const dates = [];
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(weekStart);
+            date.setDate(weekStart.getDate() + i);
+            dates.push(date);
+        }
+        return dates;
+    }
+
+    formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    isToday(date) {
+        const today = new Date();
+        return date.getFullYear() === today.getFullYear() &&
+               date.getMonth() === today.getMonth() &&
+               date.getDate() === today.getDate();
+    }
+
+    isFutureDate(date) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return date > today;
+    }
+
+    addRoutine(name, hour, minute) {
+        const newRoutine = {
+            id: Date.now().toString(),
+            name: name,
+            hour: hour,
+            minute: minute,
+            completions: {}
+        };
+
+        this.routines.push(newRoutine);
+        this.saveRoutines();
+        this.renderTable();
+        this.renderLineChart();
+    }
+
+    deleteRoutine(id) {
+        this.routines = this.routines.filter(r => r.id !== id);
+        this.saveRoutines();
+        this.renderTable();
+        this.renderLineChart();
+    }
+
+    toggleCompletion(routineId, dateString) {
+        const routine = this.routines.find(r => r.id === routineId);
+        if (routine) {
+            if (!routine.completions[dateString]) {
+                routine.completions[dateString] = true;
+            } else {
+                delete routine.completions[dateString];
+            }
+            this.saveRoutines();
+            this.renderTable();
+            this.renderLineChart();
+        }
+    }
+
+    renderWeekSelector() {
+        const weekEnd = new Date(this.currentWeekStart);
+        weekEnd.setDate(this.currentWeekStart.getDate() + 6);
+
+        const startMonth = String(this.currentWeekStart.getMonth() + 1).padStart(2, '0');
+        const startDay = String(this.currentWeekStart.getDate()).padStart(2, '0');
+        const endMonth = String(weekEnd.getMonth() + 1).padStart(2, '0');
+        const endDay = String(weekEnd.getDate()).padStart(2, '0');
+
+        document.getElementById('week-range').textContent =
+            `${startMonth}.${startDay} ~ ${endMonth}.${endDay}`;
+    }
+
+    renderTable() {
+        const dates = this.getWeekDates(this.currentWeekStart);
+        const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
+
+        // 渲染日期行
+        const tableDates = document.getElementById('table-dates');
+        tableDates.innerHTML = `
+            <div class="table-date"></div>
+            ${dates.map((date, index) => `
+                <div class="table-date ${this.isToday(date) ? 'today' : ''}">
+                    <div class="weekday">${weekdays[index]}</div>
+                    <div class="day">${String(date.getDate()).padStart(2, '0')}</div>
+                </div>
+            `).join('')}
+        `;
+
+        // 渲染表格内容
+        const tableContent = document.getElementById('table-content');
+        tableContent.innerHTML = this.routines.map(routine => {
+            const timeStr = `${String(routine.hour).padStart(2, '0')}:${String(routine.minute).padStart(2, '0')}`;
+
+            return `
+                <div class="table-row" data-id="${routine.id}">
+                    <div class="table-cell routine-info">
+                        <div class="routine-name">${routine.name}</div>
+                        <div class="routine-time">${timeStr}</div>
+                    </div>
+                    ${dates.map(date => {
+                        const dateString = this.formatDate(date);
+                        const isCompleted = routine.completions[dateString] || false;
+                        const isFuture = this.isFutureDate(date);
+
+                        return `
+                            <div class="table-cell">
+                                <div class="routine-checkbox ${isCompleted ? 'checked' : ''} ${isFuture ? 'disabled' : ''}"
+                                     onclick="${isFuture ? `alert('不能勾选未来日期')` : `routineList.toggleCompletion('${routine.id}', '${dateString}')`}"
+                                ></div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }).join('');
+
+        // 添加删除按钮（悬浮显示）
+        document.querySelectorAll('.table-row').forEach(row => {
+            const routineId = row.dataset.id;
+            const firstCell = row.querySelector('.routine-info');
+            firstCell.style.position = 'relative';
+
+            const deleteBtn = document.createElement('div');
+            deleteBtn.className = 'routine-actions';
+            deleteBtn.innerHTML = `
+                <div class="routine-action" onclick="routineList.openDeleteModal('${routineId}')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                </div>
+            `;
+            firstCell.appendChild(deleteBtn);
+        });
+    }
+
+    renderLineChart() {
+        const canvas = document.getElementById('line-chart');
+        const ctx = canvas.getContext('2d');
+        const dates = this.getWeekDates(this.currentWeekStart);
+        const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
+
+        // 计算每天的完成率
+        const completionRates = dates.map(date => {
+            const dateString = this.formatDate(date);
+            const total = this.routines.length;
+            if (total === 0) return 0;
+
+            const completed = this.routines.filter(r => r.completions[dateString]).length;
+            return Math.round((completed / total) * 100);
+        });
+
+        // 清空画布
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 绘制网格线
+        ctx.strokeStyle = '#e0ede0';
+        ctx.lineWidth = 1;
+
+        // Y轴标签
+        const yLabels = ['100%', '80%', '60%', '40%', '20%', '0%'];
+        const yPositions = [20, 40, 60, 80, 100, 120];
+
+        ctx.font = '10px "Noto Sans SC"';
+        ctx.fillStyle = '#7ab68a';
+        ctx.textAlign = 'right';
+
+        yLabels.forEach((label, index) => {
+            const y = yPositions[index];
+            ctx.fillText(label, 35, y + 4);
+
+            ctx.beginPath();
+            ctx.moveTo(40, y);
+            ctx.lineTo(280, y);
+            ctx.stroke();
+        });
+
+        // X轴标签
+        ctx.textAlign = 'center';
+        weekdays.forEach((day, index) => {
+            const x = 60 + index * 40;
+            ctx.fillText(day, x, 140);
+        });
+
+        // 绘制折线
+        if (this.routines.length > 0) {
+            ctx.beginPath();
+            ctx.strokeStyle = '#4a7c59';
+            ctx.lineWidth = 2.5;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+
+            completionRates.forEach((rate, index) => {
+                const x = 60 + index * 40;
+                const y = 120 - (rate / 100) * 100;
+
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+
+            ctx.stroke();
+
+            // 绘制数据点
+            completionRates.forEach((rate, index) => {
+                const x = 60 + index * 40;
+                const y = 120 - (rate / 100) * 100;
+
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, Math.PI * 2);
+                ctx.fillStyle = '#4a7c59';
+                ctx.fill();
+            });
+        }
+    }
+
+    openDeleteModal(id) {
+        this.currentDeleteId = id;
+        routineDeleteModal.open();
+    }
+
+    initTimeSelectors() {
+        const hourSelect = document.getElementById('routine-hour');
+        const minuteSelect = document.getElementById('routine-minute');
+
+        hourSelect.innerHTML = '';
+        for (let i = 0; i < 24; i++) {
+            hourSelect.innerHTML += `<option value="${i}">${String(i).padStart(2, '0')}</option>`;
+        }
+
+        minuteSelect.innerHTML = '';
+        for (let i = 0; i < 60; i++) {
+            minuteSelect.innerHTML += `<option value="${i}">${String(i).padStart(2, '0')}</option>`;
+        }
+    }
+
+    bindEvents() {
+        // 上一周
+        document.getElementById('prev-week').addEventListener('click', () => {
+            this.currentWeekStart.setDate(this.currentWeekStart.getDate() - 7);
+            this.renderWeekSelector();
+            this.renderTable();
+            this.renderLineChart();
+        });
+
+        // 下一周
+        document.getElementById('next-week').addEventListener('click', () => {
+            this.currentWeekStart.setDate(this.currentWeekStart.getDate() + 7);
+            this.renderWeekSelector();
+            this.renderTable();
+            this.renderLineChart();
+        });
+
+        // 添加恒例按钮
+        document.getElementById('add-routine-btn').addEventListener('click', () => {
+            document.getElementById('routine-input').value = '';
+            document.getElementById('routine-hour').value = '6';
+            document.getElementById('routine-minute').value = '0';
+            routineModal.open();
+        });
+
+        // 提交恒例
+        document.getElementById('routine-submit-btn').addEventListener('click', () => {
+            const name = document.getElementById('routine-input').value.trim();
+            if (!name) {
+                alert('请输入事件描述');
+                return;
+            }
+
+            if (name.length > 12) {
+                alert('事件描述最多12个字符');
+                return;
+            }
+
+            const hour = parseInt(document.getElementById('routine-hour').value);
+            const minute = parseInt(document.getElementById('routine-minute').value);
+
+            this.addRoutine(name, hour, minute);
+            routineModal.close();
+        });
+
+        // 删除确认
+        document.getElementById('routine-delete-confirm-btn').addEventListener('click', () => {
+            if (this.currentDeleteId) {
+                this.deleteRoutine(this.currentDeleteId);
+            }
+            routineDeleteModal.close();
+        });
+    }
+}
+
+// 初始化
+let routineList;
+let routineModal;
+let routineDeleteModal;
+
+document.addEventListener('DOMContentLoaded', function() {
+    routineModal = new Modal('routine-modal');
+    routineDeleteModal = new Modal('routine-delete-modal');
+    routineList = new RoutineList();
+});
+```
+
+- [ ] **Step 4: 提交恒例模块**
+
+```bash
+git add index.html
+git commit -m "feat: 添加恒例模块（表格、添加、删除、折线图）"
+```
+
+---
+
+### Task 7: 月度模块 - 热力图日历与统计
+
+**Files:**
+- Modify: `index.html` (添加月度模块 HTML、样式和 JavaScript)
+
+- [ ] **Step 1: 添加月度模块 HTML**
+
+在 `#monthly-module` 中添加：
+
+```html
+<!-- 月份选择器 -->
+<div class="month-selector">
+    <button class="month-btn" id="prev-month">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+    </button>
+    <span class="month-title" id="month-title">2024年6月</span>
+    <button class="month-btn" id="next-month">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+    </button>
+</div>
+
+<!-- 热力图日历 -->
+<div class="heatmap-calendar" id="heatmap-calendar">
+    <div class="calendar-header">
+        <div class="calendar-weekday">一</div>
+        <div class="calendar-weekday">二</div>
+        <div class="calendar-weekday">三</div>
+        <div class="calendar-weekday">四</div>
+        <div class="calendar-weekday">五</div>
+        <div class="calendar-weekday">六</div>
+        <div class="calendar-weekday">日</div>
+    </div>
+    <div class="calendar-grid" id="calendar-grid">
+        <!-- 日期格子将通过 JavaScript 生成 -->
+    </div>
+    <div class="calendar-legend">
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: white; border: 1px solid #e0ede0;"></div>
+            <span>0%</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #d4e8da;"></div>
+            <span>1-25%</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #a8d5b8;"></div>
+            <span>26-50%</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #7ab68a;"></div>
+            <span>51-75%</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #4a7c59;"></div>
+            <span>76-100%</span>
+        </div>
+    </div>
+</div>
+
+<!-- 统计区域 -->
+<div class="stats-section" id="stats-section">
+    <div class="stat-item">
+        <span class="stat-label">本月添加日程</span>
+        <span class="stat-value" id="stat-todos-added">0 条</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-label">本月完成日程</span>
+        <span class="stat-value" id="stat-todos-completed">0 条</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-label">每日恒例</span>
+        <span class="stat-value" id="stat-routines-total">0 条</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-label">每日平均完成恒例</span>
+        <span class="stat-value" id="stat-routines-avg">0 条</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-label">月完成度</span>
+        <span class="stat-value highlight" id="stat-monthly-completion">0%</span>
+    </div>
+</div>
+```
+
+- [ ] **Step 2: 添加月度模块样式**
+
+```css
+/* 月份选择器 */
+.month-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-5);
+    margin-bottom: var(--space-5);
+}
+
+.month-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--color-card-bg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    transition: all 0.2s ease;
+}
+
+.month-btn:hover {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.month-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.month-title {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+/* 热力图日历 */
+.heatmap-calendar {
+    background-color: var(--color-card-bg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-5);
+}
+
+.calendar-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+}
+
+.calendar-weekday {
+    text-align: center;
+    font-family: var(--font-serif);
+    font-size: 12px;
+    color: var(--color-text-muted);
+    padding: var(--space-2) 0;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: var(--space-2);
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    font-family: var(--font-serif);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    transition: all 0.2s ease;
+    cursor: default;
+}
+
+.calendar-day.empty {
+    background: transparent;
+}
+
+.calendar-day.today {
+    background-color: var(--color-primary);
+    color: white;
+    font-weight: 700;
+}
+
+.calendar-day.level-0 {
+    background-color: white;
+    border: 1px solid #e0ede0;
+}
+
+.calendar-day.level-1 {
+    background-color: #d4e8da;
+    color: var(--color-text-primary);
+}
+
+.calendar-day.level-2 {
+    background-color: #a8d5b8;
+    color: var(--color-text-primary);
+}
+
+.calendar-day.level-3 {
+    background-color: #7ab68a;
+    color: white;
+}
+
+.calendar-day.level-4 {
+    background-color: #4a7c59;
+    color: white;
+}
+
+.calendar-legend {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid #e0ede0;
+}
+
+.calendar-legend .legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 11px;
+    color: var(--color-text-muted);
+}
+
+.calendar-legend .legend-color {
+    width: 14px;
+    height: 14px;
+    border-radius: var(--radius-sm);
+}
+
+/* 统计区域 */
+.stats-section {
+    background-color: var(--color-card-bg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid #e0ede0;
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-label {
+    font-family: var(--font-serif);
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+.stat-value {
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.stat-value.highlight {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    color: var(--color-primary);
+}
+```
+
+- [ ] **Step 3: 添加月度管理 JavaScript 逻辑**
+
+```javascript
+// 月度管理
+class MonthlyView {
+    constructor() {
+        this.currentDate = new Date();
+        this.init();
+    }
+
+    init() {
+        this.renderMonthTitle();
+        this.renderCalendar();
+        this.renderStats();
+        this.bindEvents();
+    }
+
+    renderMonthTitle() {
+        const year = this.currentDate.getFullYear();
+        const month = this.currentDate.getMonth() + 1;
+        document.getElementById('month-title').textContent = `${year}年${month}月`;
+    }
+
+    renderCalendar() {
+        const year = this.currentDate.getFullYear();
+        const month = this.currentDate.getMonth();
+
+        // 获取本月第一天是星期几（0=周日，调整为周一开始）
+        const firstDay = new Date(year, month, 1);
+        let startDay = firstDay.getDay();
+        if (startDay === 0) startDay = 7; // 周日调整为7
+
+        // 获取本月天数
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // 生成日历格子
+        const calendarGrid = document.getElementById('calendar-grid');
+        let html = '';
+
+        // 填充空白格子（月初）
+        for (let i = 1; i < startDay; i++) {
+            html += '<div class="calendar-day empty"></div>';
+        }
+
+        // 填充日期格子
+        const today = new Date();
+        for (let day = 1; day <= daysInMonth; day++) {
+            const date = new Date(year, month, day);
+            const isToday = this.isSameDay(date, today);
+            const completionLevel = this.getCompletionLevel(date);
+
+            let className = 'calendar-day';
+            if (isToday) {
+                className += ' today';
+            } else {
+                className += ` level-${completionLevel}`;
+            }
+
+            html += `<div class="${className}">${day}</div>`;
+        }
+
+        calendarGrid.innerHTML = html;
+    }
+
+    getCompletionLevel(date) {
+        const dateString = this.formatDate(date);
+
+        // 获取日程完成情况
+        const todos = JSON.parse(localStorage.getItem('reflecto_todos') || '[]');
+        const dayTodos = todos.filter(t => t.date === dateString);
+        const completedTodos = dayTodos.filter(t => t.completed).length;
+
+        // 获取恒例完成情况
+        const routines = JSON.parse(localStorage.getItem('reflecto_routines') || '[]');
+        const completedRoutines = routines.filter(r => r.completions[dateString]).length;
+
+        // 计算总完成度
+        const totalTasks = dayTodos.length + routines.length;
+        const totalCompleted = completedTodos + completedRoutines;
+
+        if (totalTasks === 0) return 0;
+
+        const completionRate = totalCompleted / totalTasks;
+
+        if (completionRate === 0) return 0;
+        if (completionRate <= 0.25) return 1;
+        if (completionRate <= 0.5) return 2;
+        if (completionRate <= 0.75) return 3;
+        return 4;
+    }
+
+    renderStats() {
+        const year = this.currentDate.getFullYear();
+        const month = this.currentDate.getMonth();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // 获取日程数据
+        const todos = JSON.parse(localStorage.getItem('reflecto_todos') || '[]');
+        const monthTodos = todos.filter(t => {
+            const todoDate = new Date(t.date);
+            return todoDate.getFullYear() === year && todoDate.getMonth() === month;
+        });
+        const completedTodos = monthTodos.filter(t => t.completed);
+
+        // 获取恒例数据
+        const routines = JSON.parse(localStorage.getItem('reflecto_routines') || '[]');
+
+        // 计算每日平均完成恒例
+        let totalRoutinesCompleted = 0;
+        for (let day = 1; day <= daysInMonth; day++) {
+            const date = new Date(year, month, day);
+            const dateString = this.formatDate(date);
+            totalRoutinesCompleted += routines.filter(r => r.completions[dateString]).length;
+        }
+        const avgRoutines = daysInMonth > 0 ? (totalRoutinesCompleted / daysInMonth).toFixed(1) : 0;
+
+        // 计算月完成度
+        const totalTasks = monthTodos.length + (routines.length * daysInMonth);
+        const totalCompleted = completedTodos.length + totalRoutinesCompleted;
+        const monthlyCompletion = totalTasks > 0 ? Math.round((totalCompleted / totalTasks) * 100) : 0;
+
+        // 更新统计显示
+        document.getElementById('stat-todos-added').textContent = `${monthTodos.length} 条`;
+        document.getElementById('stat-todos-completed').textContent = `${completedTodos.length} 条`;
+        document.getElementById('stat-routines-total').textContent = `${routines.length} 条`;
+        document.getElementById('stat-routines-avg').textContent = `${avgRoutines} 条`;
+        document.getElementById('stat-monthly-completion').textContent = `${monthlyCompletion}%`;
+    }
+
+    formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    isSameDay(date1, date2) {
+        return date1.getFullYear() === date2.getFullYear() &&
+               date1.getMonth() === date2.getMonth() &&
+               date1.getDate() === date2.getDate();
+    }
+
+    bindEvents() {
+        // 上一月
+        document.getElementById('prev-month').addEventListener('click', () => {
+            this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+            this.renderMonthTitle();
+            this.renderCalendar();
+            this.renderStats();
+        });
+
+        // 下一月
+        document.getElementById('next-month').addEventListener('click', () => {
+            this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+            this.renderMonthTitle();
+            this.renderCalendar();
+            this.renderStats();
+        });
+    }
+}
+
+// 初始化
+let monthlyView;
+
+document.addEventListener('DOMContentLoaded', function() {
+    monthlyView = new MonthlyView();
+});
+```
+
+- [ ] **Step 4: 提交月度模块**
+
+```bash
+git add index.html
+git commit -m "feat: 添加月度模块（热力图日历、统计）"
+```
+
+---
+
+### Task 8: 最终整合与测试
+
+**Files:**
+- Modify: `index.html` (修复模块切换时的数据刷新)
+
+- [ ] **Step 1: 添加模块切换时的数据刷新**
+
+修改模块切换逻辑，确保切换模块时刷新数据：
+
+```javascript
+// 模块切换（更新版本）
+document.addEventListener('DOMContentLoaded', function() {
+    const navItems = document.querySelectorAll('.nav-item');
+    const modules = document.querySelectorAll('.module');
+
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const targetModule = this.dataset.module;
+
+            // 更新导航栏状态
+            navItems.forEach(nav => nav.classList.remove('active'));
+            this.classList.add('active');
+
+            // 切换模块显示
+            modules.forEach(module => module.classList.remove('active'));
+            document.getElementById(`${targetModule}-module`).classList.add('active');
+
+            // 更新标语
+            updateSlogan();
+
+            // 刷新目标模块数据
+            if (targetModule === 'schedule' && typeof todoList !== 'undefined') {
+                todoList.render();
+            } else if (targetModule === 'routine' && typeof routineList !== 'undefined') {
+                routineList.renderTable();
+                routineList.renderLineChart();
+            } else if (targetModule === 'monthly' && typeof monthlyView !== 'undefined') {
+                monthlyView.renderCalendar();
+                monthlyView.renderStats();
+            }
+        });
+    });
+});
+```
+
+- [ ] **Step 2: 测试所有功能**
+
+手动测试以下功能：
+1. 日程模块：添加、编辑、删除、完成待办
+2. 恒例模块：添加、删除恒例，勾选/取消勾选
+3. 月度模块：切换月份，查看统计数据
+4. 模块切换：数据正确刷新
+5. 响应式：不同屏幕尺寸下正常显示
+
+- [ ] **Step 3: 最终提交**
+
+```bash
+git add index.html
+git commit -m "feat: 完成所有模块整合和测试"
+```
+
+---
+
+### Task 9: 部署到 GitHub Pages
+
+**Files:**
+- Create: `README.md`
+
+- [ ] **Step 1: 创建 README.md**
+
+```markdown
+# 观己 Reflecto
+
+一个面向中文用户的个人待办打卡网站。
+
+## 功能特性
+
+- **日程模块**：管理每日待办事项，支持添加、编辑、删除、完成
+- **恒例模块**：管理每日重复任务，以周为单位展示
+- **月度模块**：查看月度完成度统计，热力图日历展示
+
+## 技术栈
+
+- HTML5
+- CSS3
+- JavaScript (ES6+)
+- localStorage 本地存储
+
+## 使用方法
+
+直接打开 `index.html` 文件即可使用。
+
+## 部署
+
+本项目已部署到 GitHub Pages，访问地址：[https://cori-anba.github.io/Reflecto/](https://cori-anba.github.io/Reflecto/)
+
+## 开发
+
+```bash
+# 克隆仓库
+git clone https://github.com/Cori-anba/Reflecto.git
+
+# 进入项目目录
+cd Reflecto
+
+# 用浏览器打开
+open index.html
+```
+
+## 许可证
+
+MIT License
+```
+
+- [ ] **Step 2: 提交 README**
+
+```bash
+git add README.md
+git commit -m "docs: 添加 README 文档"
+```
+
+- [ ] **Step 3: 推送到 GitHub**
+
+```bash
+git remote add origin https://github.com/Cori-anba/Reflecto.git
+git push -u origin main
+```
+
+- [ ] **Step 4: 启用 GitHub Pages**
+
+1. 进入仓库设置页面
+2. 找到 "Pages" 选项
+3. Source 选择 "Deploy from a branch"
+4. Branch 选择 "main"，文件夹选择 "/ (root)"
+5. 点击 "Save"
+
+等待几分钟后，网站将可通过 https://cori-anba.github.io/Reflecto/ 访问。
+
+---
+
+## 完成
+
+至此，Reflecto（观己）项目的所有功能已实现并部署完成。
