@@ -2513,6 +2513,17 @@
                         addTodoBtn.style.display = 'none';
                         addRoutineBtn.style.display = 'none';
                     }
+
+                    // 刷新目标模块数据
+                    if (targetModule === 'schedule' && typeof todoList !== 'undefined') {
+                        todoList.render();
+                    } else if (targetModule === 'routine' && typeof routineList !== 'undefined') {
+                        routineList.renderTable();
+                        routineList.renderLineChart();
+                    } else if (targetModule === 'monthly' && typeof monthlyView !== 'undefined') {
+                        monthlyView.renderCalendar();
+                        monthlyView.renderStats();
+                    }
                 });
             });
 
