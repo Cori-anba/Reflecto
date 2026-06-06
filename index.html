@@ -2481,7 +2481,7 @@
             routineList = new RoutineList();
             monthlyView = new MonthlyView();
 
-            // 更新模块切换逻辑，控制 FAB 按钮显示
+            // 模块切换逻辑，控制 FAB 按钮显示
             const navItems = document.querySelectorAll('.nav-item');
             const modules = document.querySelectorAll('.module');
             const addTodoBtn = document.getElementById('add-todo-btn');
@@ -2524,27 +2524,6 @@
                         monthlyView.renderCalendar();
                         monthlyView.renderStats();
                     }
-                });
-            });
-
-            // 模块切换
-            const navItems = document.querySelectorAll('.nav-item');
-            const modules = document.querySelectorAll('.module');
-
-            navItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const targetModule = this.dataset.module;
-
-                    // 更新导航栏状态
-                    navItems.forEach(nav => nav.classList.remove('active'));
-                    this.classList.add('active');
-
-                    // 切换模块显示
-                    modules.forEach(module => module.classList.remove('active'));
-                    document.getElementById(`${targetModule}-module`).classList.add('active');
-
-                    // 更新标语
-                    updateSlogan();
                 });
             });
         });
