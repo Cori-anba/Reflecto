@@ -955,6 +955,184 @@
         #line-chart {
             min-width: 300px;
         }
+
+        /* 月份选择器 */
+        .month-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-5);
+            margin-bottom: var(--space-5);
+        }
+
+        .month-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--color-card-bg);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary);
+            transition: all 0.2s ease;
+        }
+
+        .month-btn:hover {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .month-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .month-title {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        /* 热力图日历 */
+        .heatmap-calendar {
+            background-color: var(--color-card-bg);
+            border-radius: var(--radius-xl);
+            padding: var(--space-5);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--space-5);
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: var(--space-2);
+            margin-bottom: var(--space-3);
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-family: var(--font-serif);
+            font-size: 12px;
+            color: var(--color-text-muted);
+            padding: var(--space-2) 0;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: var(--space-2);
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            font-family: var(--font-serif);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+
+        .calendar-day.empty {
+            background: transparent;
+        }
+
+        .calendar-day.today {
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: 700;
+        }
+
+        .calendar-day.level-0 {
+            background-color: white;
+            border: 1px solid #e0ede0;
+        }
+
+        .calendar-day.level-1 {
+            background-color: #d4e8da;
+            color: var(--color-text-primary);
+        }
+
+        .calendar-day.level-2 {
+            background-color: #a8d5b8;
+            color: var(--color-text-primary);
+        }
+
+        .calendar-day.level-3 {
+            background-color: #7ab68a;
+            color: white;
+        }
+
+        .calendar-day.level-4 {
+            background-color: #4a7c59;
+            color: white;
+        }
+
+        .calendar-legend {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-4);
+            margin-top: var(--space-4);
+            padding-top: var(--space-4);
+            border-top: 1px solid #e0ede0;
+        }
+
+        .calendar-legend .legend-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: 11px;
+            color: var(--color-text-muted);
+        }
+
+        .calendar-legend .legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: var(--radius-sm);
+        }
+
+        /* 统计区域 */
+        .stats-section {
+            background-color: var(--color-card-bg);
+            border-radius: var(--radius-xl);
+            padding: var(--space-5);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-4) 0;
+            border-bottom: 1px solid #e0ede0;
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            font-family: var(--font-serif);
+            font-size: 13px;
+            color: var(--color-text-secondary);
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .stat-value.highlight {
+            font-family: var(--font-serif);
+            font-size: 20px;
+            color: var(--color-primary);
+        }
     </style>
 </head>
 <body>
@@ -1047,7 +1225,82 @@
 
             <!-- 月度模块 -->
             <section id="monthly-module" class="module">
-                <!-- 月度内容将在后续任务中添加 -->
+                <!-- 月份选择器 -->
+                <div class="month-selector">
+                    <button class="month-btn" id="prev-month">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <span class="month-title" id="month-title">2024年6月</span>
+                    <button class="month-btn" id="next-month">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- 热力图日历 -->
+                <div class="heatmap-calendar" id="heatmap-calendar">
+                    <div class="calendar-header">
+                        <div class="calendar-weekday">一</div>
+                        <div class="calendar-weekday">二</div>
+                        <div class="calendar-weekday">三</div>
+                        <div class="calendar-weekday">四</div>
+                        <div class="calendar-weekday">五</div>
+                        <div class="calendar-weekday">六</div>
+                        <div class="calendar-weekday">日</div>
+                    </div>
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- 日期格子将通过 JavaScript 生成 -->
+                    </div>
+                    <div class="calendar-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: white; border: 1px solid #e0ede0;"></div>
+                            <span>0%</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #d4e8da;"></div>
+                            <span>1-25%</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #a8d5b8;"></div>
+                            <span>26-50%</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #7ab68a;"></div>
+                            <span>51-75%</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #4a7c59;"></div>
+                            <span>76-100%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 统计区域 -->
+                <div class="stats-section" id="stats-section">
+                    <div class="stat-item">
+                        <span class="stat-label">本月添加日程</span>
+                        <span class="stat-value" id="stat-todos-added">0 条</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">本月完成日程</span>
+                        <span class="stat-value" id="stat-todos-completed">0 条</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">每日恒例</span>
+                        <span class="stat-value" id="stat-routines-total">0 条</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">每日平均完成恒例</span>
+                        <span class="stat-value" id="stat-routines-avg">0 条</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">月完成度</span>
+                        <span class="stat-value highlight" id="stat-monthly-completion">0%</span>
+                    </div>
+                </div>
             </section>
         </main>
 
@@ -2048,6 +2301,164 @@
             }
         }
 
+        // 月度管理
+        class MonthlyView {
+            constructor() {
+                this.currentDate = new Date();
+                this.init();
+            }
+
+            init() {
+                this.renderMonthTitle();
+                this.renderCalendar();
+                this.renderStats();
+                this.bindEvents();
+            }
+
+            renderMonthTitle() {
+                const year = this.currentDate.getFullYear();
+                const month = this.currentDate.getMonth() + 1;
+                document.getElementById('month-title').textContent = `${year}年${month}月`;
+            }
+
+            renderCalendar() {
+                const year = this.currentDate.getFullYear();
+                const month = this.currentDate.getMonth();
+
+                // 获取本月第一天是星期几（0=周日，调整为周一开始）
+                const firstDay = new Date(year, month, 1);
+                let startDay = firstDay.getDay();
+                if (startDay === 0) startDay = 7; // 周日调整为7
+
+                // 获取本月天数
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                // 生成日历格子
+                const calendarGrid = document.getElementById('calendar-grid');
+                let html = '';
+
+                // 填充空白格子（月初）
+                for (let i = 1; i < startDay; i++) {
+                    html += '<div class="calendar-day empty"></div>';
+                }
+
+                // 填充日期格子
+                const today = new Date();
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(year, month, day);
+                    const isToday = this.isSameDay(date, today);
+                    const completionLevel = this.getCompletionLevel(date);
+
+                    let className = 'calendar-day';
+                    if (isToday) {
+                        className += ' today';
+                    } else {
+                        className += ` level-${completionLevel}`;
+                    }
+
+                    html += `<div class="${className}">${day}</div>`;
+                }
+
+                calendarGrid.innerHTML = html;
+            }
+
+            getCompletionLevel(date) {
+                const dateString = this.formatDate(date);
+
+                // 获取日程完成情况
+                const todos = JSON.parse(localStorage.getItem('reflecto_todos') || '[]');
+                const dayTodos = todos.filter(t => t.date === dateString);
+                const completedTodos = dayTodos.filter(t => t.completed).length;
+
+                // 获取恒例完成情况
+                const routines = JSON.parse(localStorage.getItem('reflecto_routines') || '[]');
+                const completedRoutines = routines.filter(r => r.completions[dateString]).length;
+
+                // 计算总完成度
+                const totalTasks = dayTodos.length + routines.length;
+                const totalCompleted = completedTodos + completedRoutines;
+
+                if (totalTasks === 0) return 0;
+
+                const completionRate = totalCompleted / totalTasks;
+
+                if (completionRate === 0) return 0;
+                if (completionRate <= 0.25) return 1;
+                if (completionRate <= 0.5) return 2;
+                if (completionRate <= 0.75) return 3;
+                return 4;
+            }
+
+            renderStats() {
+                const year = this.currentDate.getFullYear();
+                const month = this.currentDate.getMonth();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                // 获取日程数据
+                const todos = JSON.parse(localStorage.getItem('reflecto_todos') || '[]');
+                const monthTodos = todos.filter(t => {
+                    const todoDate = new Date(t.date);
+                    return todoDate.getFullYear() === year && todoDate.getMonth() === month;
+                });
+                const completedTodos = monthTodos.filter(t => t.completed);
+
+                // 获取恒例数据
+                const routines = JSON.parse(localStorage.getItem('reflecto_routines') || '[]');
+
+                // 计算每日平均完成恒例
+                let totalRoutinesCompleted = 0;
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(year, month, day);
+                    const dateString = this.formatDate(date);
+                    totalRoutinesCompleted += routines.filter(r => r.completions[dateString]).length;
+                }
+                const avgRoutines = daysInMonth > 0 ? (totalRoutinesCompleted / daysInMonth).toFixed(1) : 0;
+
+                // 计算月完成度
+                const totalTasks = monthTodos.length + (routines.length * daysInMonth);
+                const totalCompleted = completedTodos.length + totalRoutinesCompleted;
+                const monthlyCompletion = totalTasks > 0 ? Math.round((totalCompleted / totalTasks) * 100) : 0;
+
+                // 更新统计显示
+                document.getElementById('stat-todos-added').textContent = `${monthTodos.length} 条`;
+                document.getElementById('stat-todos-completed').textContent = `${completedTodos.length} 条`;
+                document.getElementById('stat-routines-total').textContent = `${routines.length} 条`;
+                document.getElementById('stat-routines-avg').textContent = `${avgRoutines} 条`;
+                document.getElementById('stat-monthly-completion').textContent = `${monthlyCompletion}%`;
+            }
+
+            formatDate(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            isSameDay(date1, date2) {
+                return date1.getFullYear() === date2.getFullYear() &&
+                       date1.getMonth() === date2.getMonth() &&
+                       date1.getDate() === date2.getDate();
+            }
+
+            bindEvents() {
+                // 上一月
+                document.getElementById('prev-month').addEventListener('click', () => {
+                    this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+                    this.renderMonthTitle();
+                    this.renderCalendar();
+                    this.renderStats();
+                });
+
+                // 下一月
+                document.getElementById('next-month').addEventListener('click', () => {
+                    this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+                    this.renderMonthTitle();
+                    this.renderCalendar();
+                    this.renderStats();
+                });
+            }
+        }
+
         // 初始化
         let datePicker;
         let todoList;
@@ -2057,6 +2468,7 @@
         let routineList;
         let routineModal;
         let routineDeleteModal;
+        let monthlyView;
 
         document.addEventListener('DOMContentLoaded', function() {
             datePicker = new DatePicker();
@@ -2067,6 +2479,7 @@
             routineModal = new Modal('routine-modal');
             routineDeleteModal = new Modal('routine-delete-modal');
             routineList = new RoutineList();
+            monthlyView = new MonthlyView();
 
             // 更新模块切换逻辑，控制 FAB 按钮显示
             const navItems = document.querySelectorAll('.nav-item');
