@@ -1317,7 +1317,7 @@
             <div class="modal">
                 <div class="modal-header">
                     <h3>添加恒例</h3>
-                    <button class="modal-close" onclick="routineModal.close()">×</button>
+                    <button class="modal-close">×</button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -1338,7 +1338,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" onclick="routineModal.close()">取消</button>
+                    <button class="btn btn-secondary">取消</button>
                     <button class="btn btn-primary" id="routine-submit-btn">添加</button>
                 </div>
             </div>
@@ -1352,7 +1352,7 @@
                     <p class="delete-message">确定要删除这个恒例吗？</p>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" onclick="routineDeleteModal.close()">取消</button>
+                    <button class="btn btn-secondary">取消</button>
                     <button class="btn btn-danger" id="routine-delete-confirm-btn">删除</button>
                 </div>
             </div>
@@ -1371,7 +1371,7 @@
             <div class="modal">
                 <div class="modal-header">
                     <h3 id="modal-title">添加待办</h3>
-                    <button class="modal-close" onclick="todoModal.close()">×</button>
+                    <button class="modal-close">×</button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -1404,7 +1404,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" onclick="todoModal.close()">取消</button>
+                    <button class="btn btn-secondary">取消</button>
                     <button class="btn btn-primary" id="todo-submit-btn">添加</button>
                 </div>
             </div>
@@ -1434,7 +1434,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" onclick="completeModal.close()">取消</button>
+                    <button class="btn btn-secondary">取消</button>
                     <button class="btn btn-primary" id="complete-confirm-btn">确认完成</button>
                 </div>
             </div>
@@ -1448,7 +1448,7 @@
                     <p class="delete-message">确定要删除这个待办吗？</p>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" onclick="deleteModal.close()">取消</button>
+                    <button class="btn btn-secondary">取消</button>
                     <button class="btn btn-danger" id="delete-confirm-btn">删除</button>
                 </div>
             </div>
@@ -2480,6 +2480,26 @@
             routineDeleteModal = new Modal('routine-delete-modal');
             routineList = new RoutineList();
             monthlyView = new MonthlyView();
+
+            // 绑定模态框关闭按钮事件
+            document.querySelectorAll('.modal-close').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const modal = this.closest('.modal-overlay');
+                    if (modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+            });
+
+            // 绑定模态框取消按钮事件
+            document.querySelectorAll('.btn-secondary').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const modal = this.closest('.modal-overlay');
+                    if (modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+            });
 
             // 模块切换逻辑，控制 FAB 按钮显示
             const navItems = document.querySelectorAll('.nav-item');
