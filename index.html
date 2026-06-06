@@ -746,6 +746,215 @@
             color: var(--color-text-primary);
             margin-bottom: var(--space-4);
         }
+
+        /* 周选择器 */
+        .week-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-5);
+            margin-bottom: var(--space-5);
+        }
+
+        .week-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--color-card-bg);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary);
+            transition: all 0.2s ease;
+        }
+
+        .week-btn:hover {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .week-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .week-range {
+            font-family: var(--font-serif);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-text-primary);
+        }
+
+        /* 恒例表格 */
+        .routine-table {
+            background-color: var(--color-card-bg);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--space-5);
+        }
+
+        .table-dates {
+            display: grid;
+            grid-template-columns: 90px repeat(7, 1fr);
+            gap: 1px;
+            background-color: var(--color-primary-lighter);
+            padding: var(--space-3) 0;
+        }
+
+        .table-date {
+            text-align: center;
+            font-family: var(--font-serif);
+            font-size: 11px;
+            color: var(--color-text-muted);
+        }
+
+        .table-date .weekday {
+            margin-bottom: var(--space-1);
+        }
+
+        .table-date .day {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+        }
+
+        .table-date.today {
+            color: var(--color-primary);
+        }
+
+        .table-date.today .day {
+            color: var(--color-primary);
+            font-weight: 700;
+        }
+
+        .table-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 90px repeat(7, 1fr);
+            gap: 1px;
+            background-color: var(--color-primary-lighter);
+            border-bottom: 1px solid var(--color-primary-lighter);
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-cell {
+            background-color: var(--color-card-bg);
+            padding: var(--space-3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .table-cell.routine-info {
+            flex-direction: column;
+            gap: var(--space-1);
+            position: relative;
+        }
+
+        .routine-name {
+            font-family: var(--font-serif);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-text-primary);
+            text-align: center;
+        }
+
+        .routine-time {
+            font-size: 10px;
+            color: var(--color-text-muted);
+        }
+
+        .routine-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--color-primary-lighter);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .routine-checkbox:hover {
+            border-color: var(--color-primary);
+        }
+
+        .routine-checkbox.checked {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        .routine-checkbox.checked::after {
+            content: '';
+            display: block;
+            width: 5px;
+            height: 9px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg) translateY(-1px);
+        }
+
+        .routine-checkbox.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .routine-actions {
+            display: flex;
+            gap: var(--space-1);
+            position: absolute;
+            right: var(--space-2);
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .table-row:hover .routine-actions {
+            opacity: 1;
+        }
+
+        .routine-action {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--color-danger);
+        }
+
+        .routine-action svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* 折线图 */
+        .line-chart-section {
+            background-color: var(--color-card-bg);
+            border-radius: var(--radius-xl);
+            padding: var(--space-5);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .line-chart-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        #line-chart {
+            min-width: 300px;
+        }
     </style>
 </head>
 <body>
@@ -802,7 +1011,38 @@
 
             <!-- 恒例模块 -->
             <section id="routine-module" class="module">
-                <!-- 恒例内容将在后续任务中添加 -->
+                <!-- 周选择器 -->
+                <div class="week-selector">
+                    <button class="week-btn" id="prev-week">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <span class="week-range" id="week-range">06.10 ~ 06.16</span>
+                    <button class="week-btn" id="next-week">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- 恒例表格 -->
+                <div class="routine-table" id="routine-table">
+                    <div class="table-dates" id="table-dates">
+                        <!-- 日期行将通过 JavaScript 生成 -->
+                    </div>
+                    <div class="table-content" id="table-content">
+                        <!-- 表格内容将通过 JavaScript 生成 -->
+                    </div>
+                </div>
+
+                <!-- 完成率折线图 -->
+                <div class="line-chart-section">
+                    <div class="chart-title">本周完成率趋势</div>
+                    <div class="line-chart-container">
+                        <canvas id="line-chart" width="300" height="150"></canvas>
+                    </div>
+                </div>
             </section>
 
             <!-- 月度模块 -->
@@ -810,6 +1050,60 @@
                 <!-- 月度内容将在后续任务中添加 -->
             </section>
         </main>
+
+        <!-- 添加恒例悬浮按钮 -->
+        <button class="fab" id="add-routine-btn" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        </button>
+
+        <!-- 添加恒例模态框 -->
+        <div class="modal-overlay" id="routine-modal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3>添加恒例</h3>
+                    <button class="modal-close" onclick="routineModal.close()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">事件描述 *（最多6个汉字）</label>
+                        <input type="text" class="form-input" id="routine-input" placeholder="如：早起、背单词" maxlength="12">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">时间点 *</label>
+                        <div class="time-picker">
+                            <select class="time-select" id="routine-hour">
+                                <!-- 时选项将通过 JavaScript 生成 -->
+                            </select>
+                            <span class="time-separator">:</span>
+                            <select class="time-select" id="routine-minute">
+                                <!-- 分选项将通过 JavaScript 生成 -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="routineModal.close()">取消</button>
+                    <button class="btn btn-primary" id="routine-submit-btn">添加</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 删除恒例确认模态框 -->
+        <div class="modal-overlay" id="routine-delete-modal">
+            <div class="modal modal-sm">
+                <div class="modal-body">
+                    <div class="delete-icon">🗑️</div>
+                    <p class="delete-message">确定要删除这个恒例吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="routineDeleteModal.close()">取消</button>
+                    <button class="btn btn-danger" id="routine-delete-confirm-btn">删除</button>
+                </div>
+            </div>
+        </div>
 
         <!-- 添加待办悬浮按钮 -->
         <button class="fab" id="add-todo-btn">
@@ -1430,12 +1724,339 @@
             }
         }
 
+        // 恒例管理
+        class RoutineList {
+            constructor() {
+                this.routines = this.loadRoutines();
+                this.currentWeekStart = this.getWeekStart(new Date());
+                this.currentDeleteId = null;
+                this.init();
+            }
+
+            init() {
+                this.renderWeekSelector();
+                this.renderTable();
+                this.renderLineChart();
+                this.bindEvents();
+                this.initTimeSelectors();
+            }
+
+            loadRoutines() {
+                const data = localStorage.getItem('reflecto_routines');
+                return data ? JSON.parse(data) : [];
+            }
+
+            saveRoutines() {
+                localStorage.setItem('reflecto_routines', JSON.stringify(this.routines));
+            }
+
+            getWeekStart(date) {
+                const d = new Date(date);
+                const day = d.getDay();
+                const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+                d.setDate(diff);
+                d.setHours(0, 0, 0, 0);
+                return d;
+            }
+
+            getWeekDates(weekStart) {
+                const dates = [];
+                for (let i = 0; i < 7; i++) {
+                    const date = new Date(weekStart);
+                    date.setDate(weekStart.getDate() + i);
+                    dates.push(date);
+                }
+                return dates;
+            }
+
+            formatDate(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            isToday(date) {
+                const today = new Date();
+                return date.getFullYear() === today.getFullYear() &&
+                       date.getMonth() === today.getMonth() &&
+                       date.getDate() === today.getDate();
+            }
+
+            isFutureDate(date) {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                return date > today;
+            }
+
+            addRoutine(name, hour, minute) {
+                const newRoutine = {
+                    id: Date.now().toString(),
+                    name: name,
+                    hour: hour,
+                    minute: minute,
+                    completions: {}
+                };
+
+                this.routines.push(newRoutine);
+                this.saveRoutines();
+                this.renderTable();
+                this.renderLineChart();
+            }
+
+            deleteRoutine(id) {
+                this.routines = this.routines.filter(r => r.id !== id);
+                this.saveRoutines();
+                this.renderTable();
+                this.renderLineChart();
+            }
+
+            toggleCompletion(routineId, dateString) {
+                const routine = this.routines.find(r => r.id === routineId);
+                if (routine) {
+                    if (!routine.completions[dateString]) {
+                        routine.completions[dateString] = true;
+                    } else {
+                        delete routine.completions[dateString];
+                    }
+                    this.saveRoutines();
+                    this.renderTable();
+                    this.renderLineChart();
+                }
+            }
+
+            renderWeekSelector() {
+                const weekEnd = new Date(this.currentWeekStart);
+                weekEnd.setDate(this.currentWeekStart.getDate() + 6);
+
+                const startMonth = String(this.currentWeekStart.getMonth() + 1).padStart(2, '0');
+                const startDay = String(this.currentWeekStart.getDate()).padStart(2, '0');
+                const endMonth = String(weekEnd.getMonth() + 1).padStart(2, '0');
+                const endDay = String(weekEnd.getDate()).padStart(2, '0');
+
+                document.getElementById('week-range').textContent =
+                    `${startMonth}.${startDay} ~ ${endMonth}.${endDay}`;
+            }
+
+            renderTable() {
+                const dates = this.getWeekDates(this.currentWeekStart);
+                const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
+
+                // 渲染日期行
+                const tableDates = document.getElementById('table-dates');
+                tableDates.innerHTML = `
+                    <div class="table-date"></div>
+                    ${dates.map((date, index) => `
+                        <div class="table-date ${this.isToday(date) ? 'today' : ''}">
+                            <div class="weekday">${weekdays[index]}</div>
+                            <div class="day">${String(date.getDate()).padStart(2, '0')}</div>
+                        </div>
+                    `).join('')}
+                `;
+
+                // 渲染表格内容
+                const tableContent = document.getElementById('table-content');
+                tableContent.innerHTML = this.routines.map(routine => {
+                    const timeStr = `${String(routine.hour).padStart(2, '0')}:${String(routine.minute).padStart(2, '0')}`;
+
+                    return `
+                        <div class="table-row" data-id="${routine.id}">
+                            <div class="table-cell routine-info">
+                                <div class="routine-name">${routine.name}</div>
+                                <div class="routine-time">${timeStr}</div>
+                                <div class="routine-actions">
+                                    <div class="routine-action" onclick="routineList.openDeleteModal('${routine.id}')">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            ${dates.map(date => {
+                                const dateString = this.formatDate(date);
+                                const isCompleted = routine.completions[dateString] || false;
+                                const isFuture = this.isFutureDate(date);
+
+                                return `
+                                    <div class="table-cell">
+                                        <div class="routine-checkbox ${isCompleted ? 'checked' : ''} ${isFuture ? 'disabled' : ''}"
+                                             onclick="${isFuture ? `alert('不能勾选未来日期')` : `routineList.toggleCompletion('${routine.id}', '${dateString}')`}"
+                                        ></div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            renderLineChart() {
+                const canvas = document.getElementById('line-chart');
+                const ctx = canvas.getContext('2d');
+                const dates = this.getWeekDates(this.currentWeekStart);
+                const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
+
+                // 计算每天的完成率
+                const completionRates = dates.map(date => {
+                    const dateString = this.formatDate(date);
+                    const total = this.routines.length;
+                    if (total === 0) return 0;
+
+                    const completed = this.routines.filter(r => r.completions[dateString]).length;
+                    return Math.round((completed / total) * 100);
+                });
+
+                // 清空画布
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // 绘制网格线
+                ctx.strokeStyle = '#e0ede0';
+                ctx.lineWidth = 1;
+
+                // Y轴标签
+                const yLabels = ['100%', '80%', '60%', '40%', '20%', '0%'];
+                const yPositions = [20, 40, 60, 80, 100, 120];
+
+                ctx.font = '10px "Noto Sans SC"';
+                ctx.fillStyle = '#7ab68a';
+                ctx.textAlign = 'right';
+
+                yLabels.forEach((label, index) => {
+                    const y = yPositions[index];
+                    ctx.fillText(label, 35, y + 4);
+
+                    ctx.beginPath();
+                    ctx.moveTo(40, y);
+                    ctx.lineTo(280, y);
+                    ctx.stroke();
+                });
+
+                // X轴标签
+                ctx.textAlign = 'center';
+                weekdays.forEach((day, index) => {
+                    const x = 60 + index * 40;
+                    ctx.fillText(day, x, 140);
+                });
+
+                // 绘制折线
+                if (this.routines.length > 0) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#4a7c59';
+                    ctx.lineWidth = 2.5;
+                    ctx.lineJoin = 'round';
+                    ctx.lineCap = 'round';
+
+                    completionRates.forEach((rate, index) => {
+                        const x = 60 + index * 40;
+                        const y = 120 - (rate / 100) * 100;
+
+                        if (index === 0) {
+                            ctx.moveTo(x, y);
+                        } else {
+                            ctx.lineTo(x, y);
+                        }
+                    });
+
+                    ctx.stroke();
+
+                    // 绘制数据点
+                    completionRates.forEach((rate, index) => {
+                        const x = 60 + index * 40;
+                        const y = 120 - (rate / 100) * 100;
+
+                        ctx.beginPath();
+                        ctx.arc(x, y, 4, 0, Math.PI * 2);
+                        ctx.fillStyle = '#4a7c59';
+                        ctx.fill();
+                    });
+                }
+            }
+
+            openDeleteModal(id) {
+                this.currentDeleteId = id;
+                routineDeleteModal.open();
+            }
+
+            initTimeSelectors() {
+                const hourSelect = document.getElementById('routine-hour');
+                const minuteSelect = document.getElementById('routine-minute');
+
+                hourSelect.innerHTML = '';
+                for (let i = 0; i < 24; i++) {
+                    hourSelect.innerHTML += `<option value="${i}">${String(i).padStart(2, '0')}</option>`;
+                }
+
+                minuteSelect.innerHTML = '';
+                for (let i = 0; i < 60; i++) {
+                    minuteSelect.innerHTML += `<option value="${i}">${String(i).padStart(2, '0')}</option>`;
+                }
+            }
+
+            bindEvents() {
+                // 上一周
+                document.getElementById('prev-week').addEventListener('click', () => {
+                    this.currentWeekStart.setDate(this.currentWeekStart.getDate() - 7);
+                    this.renderWeekSelector();
+                    this.renderTable();
+                    this.renderLineChart();
+                });
+
+                // 下一周
+                document.getElementById('next-week').addEventListener('click', () => {
+                    this.currentWeekStart.setDate(this.currentWeekStart.getDate() + 7);
+                    this.renderWeekSelector();
+                    this.renderTable();
+                    this.renderLineChart();
+                });
+
+                // 添加恒例按钮
+                document.getElementById('add-routine-btn').addEventListener('click', () => {
+                    document.getElementById('routine-input').value = '';
+                    document.getElementById('routine-hour').value = '6';
+                    document.getElementById('routine-minute').value = '0';
+                    routineModal.open();
+                });
+
+                // 提交恒例
+                document.getElementById('routine-submit-btn').addEventListener('click', () => {
+                    const name = document.getElementById('routine-input').value.trim();
+                    if (!name) {
+                        alert('请输入事件描述');
+                        return;
+                    }
+
+                    if (name.length > 12) {
+                        alert('事件描述最多12个字符');
+                        return;
+                    }
+
+                    const hour = parseInt(document.getElementById('routine-hour').value);
+                    const minute = parseInt(document.getElementById('routine-minute').value);
+
+                    this.addRoutine(name, hour, minute);
+                    routineModal.close();
+                });
+
+                // 删除确认
+                document.getElementById('routine-delete-confirm-btn').addEventListener('click', () => {
+                    if (this.currentDeleteId) {
+                        this.deleteRoutine(this.currentDeleteId);
+                    }
+                    routineDeleteModal.close();
+                });
+            }
+        }
+
         // 初始化
         let datePicker;
         let todoList;
         let todoModal;
         let completeModal;
         let deleteModal;
+        let routineList;
+        let routineModal;
+        let routineDeleteModal;
 
         document.addEventListener('DOMContentLoaded', function() {
             datePicker = new DatePicker();
@@ -1443,6 +2064,44 @@
             completeModal = new Modal('complete-modal');
             deleteModal = new Modal('delete-modal');
             todoList = new TodoList();
+            routineModal = new Modal('routine-modal');
+            routineDeleteModal = new Modal('routine-delete-modal');
+            routineList = new RoutineList();
+
+            // 更新模块切换逻辑，控制 FAB 按钮显示
+            const navItems = document.querySelectorAll('.nav-item');
+            const modules = document.querySelectorAll('.module');
+            const addTodoBtn = document.getElementById('add-todo-btn');
+            const addRoutineBtn = document.getElementById('add-routine-btn');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const targetModule = this.dataset.module;
+
+                    // 更新导航栏状态
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // 切换模块显示
+                    modules.forEach(module => module.classList.remove('active'));
+                    document.getElementById(`${targetModule}-module`).classList.add('active');
+
+                    // 更新标语
+                    updateSlogan();
+
+                    // 控制 FAB 按钮显示
+                    if (targetModule === 'schedule') {
+                        addTodoBtn.style.display = 'flex';
+                        addRoutineBtn.style.display = 'none';
+                    } else if (targetModule === 'routine') {
+                        addTodoBtn.style.display = 'none';
+                        addRoutineBtn.style.display = 'flex';
+                    } else {
+                        addTodoBtn.style.display = 'none';
+                        addRoutineBtn.style.display = 'none';
+                    }
+                });
+            });
 
             // 模块切换
             const navItems = document.querySelectorAll('.nav-item');
