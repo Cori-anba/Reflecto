@@ -2496,8 +2496,9 @@
 
             getWeekStart(date) {
                 const d = new Date(date);
-                const day = d.getDay();
-                const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+                const day = d.getDay(); // 0=周日, 1=周一, ..., 6=周六
+                // 以周日为一周的开始
+                const diff = d.getDate() - day;
                 d.setDate(diff);
                 d.setHours(0, 0, 0, 0);
                 return d;
@@ -2611,16 +2612,16 @@
                     `).join('')}
                 `;
 
-                // 获取本周第一天的开始时间（用于判断恒例是否在本周之前创建）
-                const weekStart = new Date(dates[0]);
-                weekStart.setHours(0, 0, 0, 0);
+                // 获取本周最后一天的结束时间
+                const weekEnd = new Date(dates[6]);
+                weekEnd.setHours(23, 59, 59, 999);
 
-                // 只显示在本周第一天之前或当天创建的恒例（即对本周有效的恒例）
+                // 只显示在本周最后一天之前（含当天）创建的恒例
                 const validRoutines = this.routines.filter(r => {
                     const createdDate = new Date(parseInt(r.id));
                     createdDate.setHours(0, 0, 0, 0);
-                    // 恒例在本周第一天之前创建，对本周有效
-                    return createdDate <= weekStart;
+                    // 恒例在本周最后一天之前创建，对本周有效
+                    return createdDate <= weekEnd;
                 });
 
                 // 按时间排序恒例
