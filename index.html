@@ -3284,6 +3284,7 @@
             const navItems = document.querySelectorAll('.nav-item');
             const modules = document.querySelectorAll('.module');
             const addTodoBtn = document.getElementById('add-todo-btn');
+            const overviewTodoBtn = document.getElementById('overview-todo-btn');
             const addRoutineBtn = document.getElementById('add-routine-btn');
 
             navItems.forEach(item => {
@@ -3300,12 +3301,15 @@
 
                     if (targetModule === 'schedule') {
                         addTodoBtn.style.display = 'flex';
+                        overviewTodoBtn.style.display = 'flex';
                         addRoutineBtn.style.display = 'none';
                     } else if (targetModule === 'routine') {
                         addTodoBtn.style.display = 'none';
+                        overviewTodoBtn.style.display = 'none';
                         addRoutineBtn.style.display = 'flex';
                     } else {
                         addTodoBtn.style.display = 'none';
+                        overviewTodoBtn.style.display = 'none';
                         addRoutineBtn.style.display = 'none';
                     }
 
