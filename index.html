@@ -1202,8 +1202,7 @@
         }
 
         .calendar-day.today {
-            background-color: var(--color-primary);
-            color: white;
+            border: 2px solid var(--color-primary);
             font-weight: 700;
         }
 
@@ -2940,10 +2939,9 @@
                     const completionLevel = this.getCompletionLevel(date);
 
                     let className = 'calendar-day';
+                    className += ` level-${completionLevel}`;
                     if (isToday) {
                         className += ' today';
-                    } else {
-                        className += ` level-${completionLevel}`;
                     }
 
                     html += `<div class="${className}">${day}</div>`;
