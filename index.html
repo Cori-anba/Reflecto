@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>观己 Reflecto</title>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --color-primary: #4a7c59;
@@ -99,11 +99,21 @@
         }
 
         .slogan-bar span {
-            font-family: var(--font-sans);
-            font-size: 14px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 13px;
             font-weight: 500;
-            color: var(--color-text-primary);
-            letter-spacing: 2px;
+            color: var(--color-text-secondary);
+            letter-spacing: 1px;
+            font-style: italic;
+            transition: opacity 0.5s ease;
+        }
+
+        .slogan-bar span.fade-out {
+            opacity: 0;
+        }
+
+        .slogan-bar span.fade-in {
+            opacity: 1;
         }
 
         /* 主内容区 */
@@ -204,9 +214,22 @@
             box-shadow: var(--shadow-md);
         }
 
+        .date-item.today {
+            background-color: rgba(74, 124, 89, 0.1);
+        }
+
         .date-item.active {
-            background-color: rgba(74, 124, 89, 0.15);
+            background-color: var(--color-primary);
             border: 1.5px solid var(--color-primary);
+        }
+
+        .date-item.active .date-weekday {
+            color: white;
+            font-weight: 600;
+        }
+
+        .date-item.active .date-day {
+            color: white;
         }
 
         .date-weekday {
@@ -1719,8 +1742,7 @@
                     <span class="time-picker-confirm" onclick="confirmTimePicker()">确定</span>
                 </div>
                 <div class="time-scroll-container">
-                    <div class="time-scroll" id="time-scroll-hour"></div>
-                    <div class="time-scroll" id="time-scroll-minute"></div>
+                    <div class="time-scroll" id="time-scroll"></div>
                 </div>
             </div>
         </div>
@@ -1763,17 +1785,40 @@
     <script>
         // 标语库
         const slogans = [
-            '一期一会，珍惜当下', '日日是好日', '知行合一', '慢慢来，比较快',
-            '但行好事，莫问前程', '活在当下', '万事皆可期', '心之所向，素履以往',
-            '不忘初心', '且听风吟', '月有阴晴圆缺', '山高水长',
-            '宁静致远', '厚积薄发', '水滴石穿', '千里之行，始于足下',
-            '学无止境', '自强不息', '上善若水', '大道至简',
-            '观自在', '正心诚意', '格物致知', '慎独',
-            '日拱一卒', '功不唐捐', '玉汝于成', '行远自迩',
-            '登高自卑', '慎终如始'
+            '"一万年太久，只争朝夕"',
+            '"业精于勤，荒于嬉"',
+            '"逝者如斯夫，不舍昼夜"',
+            '"少壮不努力，老大徒伤悲"',
+            '"黑发不知勤学早，白首方悔读书迟"',
+            '"盛年不重来，一日难再晨"',
+            '"及时当勉励，岁月不待人"',
+            '"莫等闲，白了少年头，空悲切"',
+            '"天行健，君子以自强不息"',
+            '"路漫漫其修远兮，吾将上下而求索"',
+            '"宝剑锋从磨砺出，梅花香自苦寒来"',
+            '"千磨万击还坚劲，任尔东西南北风"',
+            '"不积跬步，无以至千里"',
+            '"锲而不舍，金石可镂"',
+            '"精诚所至，金石为开"',
+            '"千里之行，始于足下"',
+            '"学而不思则罔，思而不学则殆"',
+            '"温故而知新，可以为师矣"',
+            '"知之者不如好之者，好之者不如乐之者"',
+            '"三人行，必有我师焉"',
+            '"生于忧患，死于安乐"',
+            '"天将降大任于斯人也"',
+            '"不以规矩，不能成方圆"',
+            '"穷则独善其身，达则兼济天下"',
+            '"吾日三省吾身"',
+            '"士不可以不弘毅，任重而道远"',
+            '"志不强者智不达',
+            '"博学之，审问之，慎思之，明辨之，笃行之"',
+            '"书山有路勤为径，学海无涯苦作舟"',
+            '"长风破浪会有时，直挂云帆济沧海"'
         ];
 
         let lastSloganIndex = -1;
+        let sloganTimeout = null;
 
         function updateSlogan() {
             let newIndex;
@@ -1781,7 +1826,24 @@
                 newIndex = Math.floor(Math.random() * slogans.length);
             } while (newIndex === lastSloganIndex && slogans.length > 1);
             lastSloganIndex = newIndex;
-            document.getElementById('slogan-text').textContent = slogans[newIndex];
+
+            const sloganElement = document.getElementById('slogan-text');
+
+            // 淡出
+            sloganElement.classList.add('fade-out');
+            sloganElement.classList.remove('fade-in');
+
+            // 清除之前的定时器
+            if (sloganTimeout) {
+                clearTimeout(sloganTimeout);
+            }
+
+            // 500ms后更新文字并淡入
+            sloganTimeout = setTimeout(() => {
+                sloganElement.textContent = slogans[newIndex];
+                sloganElement.classList.remove('fade-out');
+                sloganElement.classList.add('fade-in');
+            }, 500);
         }
 
         // 时分选择器状态
@@ -1797,27 +1859,17 @@
             const title = field === 'hour' ? '选择小时' : '选择分钟';
             document.getElementById('time-picker-title').textContent = title;
 
-            const hourScroll = document.getElementById('time-scroll-hour');
-            const minuteScroll = document.getElementById('time-scroll-minute');
+            const scrollContainer = document.getElementById('time-scroll');
+            const count = field === 'hour' ? 24 : 60;
 
-            // 生成小时选项
-            hourScroll.innerHTML = '';
-            for (let i = 0; i < 24; i++) {
+            // 生成选项
+            scrollContainer.innerHTML = '';
+            for (let i = 0; i < count; i++) {
                 const item = document.createElement('div');
                 item.className = 'time-scroll-item';
                 item.textContent = String(i).padStart(2, '0');
-                item.onclick = () => selectTimeItem('hour', i, item);
-                hourScroll.appendChild(item);
-            }
-
-            // 生成分钟选项
-            minuteScroll.innerHTML = '';
-            for (let i = 0; i < 60; i++) {
-                const item = document.createElement('div');
-                item.className = 'time-scroll-item';
-                item.textContent = String(i).padStart(2, '0');
-                item.onclick = () => selectTimeItem('minute', i, item);
-                minuteScroll.appendChild(item);
+                item.onclick = () => selectTimeItem(i, item);
+                scrollContainer.appendChild(item);
             }
 
             // 显示弹窗
@@ -1828,8 +1880,7 @@
             const currentValue = currentDisplay.textContent;
             if (currentValue !== '时' && currentValue !== '分') {
                 const value = parseInt(currentValue);
-                const targetScroll = field === 'hour' ? hourScroll : minuteScroll;
-                const targetItem = targetScroll.children[value];
+                const targetItem = scrollContainer.children[value];
                 if (targetItem) {
                     targetItem.classList.add('selected');
                     targetItem.scrollIntoView({ block: 'center' });
@@ -1837,14 +1888,13 @@
             }
         }
 
-        function selectTimeItem(field, value, element) {
-            const container = field === 'hour' ? 'time-scroll-hour' : 'time-scroll-minute';
-            document.querySelectorAll(`#${container} .time-scroll-item`).forEach(item => {
+        function selectTimeItem(value, element) {
+            document.querySelectorAll('#time-scroll .time-scroll-item').forEach(item => {
                 item.classList.remove('selected');
             });
             element.classList.add('selected');
 
-            if (field === 'hour') {
+            if (currentTimePickerField === 'hour') {
                 selectedHour = value;
             } else {
                 selectedMinute = value;
@@ -1954,12 +2004,17 @@
 
                 this.scrollContainer.innerHTML = dates.map(date => {
                     const isActive = this.isSameDay(date, this.selectedDate);
+                    const isToday = this.isSameDay(date, today);
                     const weekday = this.getWeekday(date.getDay());
                     const day = String(date.getDate()).padStart(2, '0');
                     const month = String(date.getMonth() + 1).padStart(2, '0');
 
+                    let className = 'date-item';
+                    if (isActive) className += ' active';
+                    else if (isToday) className += ' today';
+
                     return `
-                        <div class="date-item ${isActive ? 'active' : ''}"
+                        <div class="${className}"
                              data-date="${date.toISOString()}"
                              onclick="datePicker.selectDate('${date.toISOString()}')">
                             <span class="date-weekday">${weekday}</span>
@@ -2270,26 +2325,38 @@
 
                     const centerX = canvas.width / 2;
                     const centerY = canvas.height / 2;
-                    const radius = 60;
-                    const innerRadius = 35;
+                    const radius = 65;
 
                     let startAngle = -Math.PI / 2;
                     const totalAngle = progress * 2 * Math.PI;
 
+                    // 绘制阴影
+                    ctx.save();
+                    ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
+                    ctx.shadowBlur = 15;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 5;
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                    ctx.fillStyle = 'white';
+                    ctx.fill();
+                    ctx.restore();
+
+                    // 绘制实心饼状图
                     completedWithDuration.forEach((todo, index) => {
                         const sliceAngle = (todo.duration / totalDuration) * totalAngle;
                         const color = colors[index % colors.length];
 
                         ctx.beginPath();
+                        ctx.moveTo(centerX, centerY);
                         ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
-                        ctx.arc(centerX, centerY, innerRadius, startAngle + sliceAngle, startAngle, true);
                         ctx.closePath();
                         ctx.fillStyle = color;
                         ctx.fill();
 
                         // 添加分隔线
                         ctx.strokeStyle = 'white';
-                        ctx.lineWidth = 2;
+                        ctx.lineWidth = 3;
                         ctx.stroke();
 
                         startAngle += sliceAngle;
@@ -2606,113 +2673,130 @@
                     return Math.round((completed / total) * 100);
                 });
 
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
                 const padding = { top: 20, right: 30, bottom: 35, left: 45 };
                 const chartWidth = canvas.width - padding.left - padding.right;
                 const chartHeight = canvas.height - padding.top - padding.bottom;
 
-                // 绘制背景网格
-                ctx.strokeStyle = '#e0ede0';
-                ctx.lineWidth = 1;
+                // 动画参数
+                const animationDuration = 500;
+                const startTime = performance.now();
 
-                const yLabels = ['100%', '80%', '60%', '40%', '20%', '0%'];
-                yLabels.forEach((label, index) => {
-                    const y = padding.top + (chartHeight / 5) * index;
+                function animate(currentTime) {
+                    const progress = Math.min((currentTime - startTime) / animationDuration, 1);
+                    const easedProgress = 1 - Math.pow(1 - progress, 3); // 缓动函数
 
-                    ctx.beginPath();
-                    ctx.moveTo(padding.left, y);
-                    ctx.lineTo(canvas.width - padding.right, y);
-                    ctx.stroke();
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                    ctx.font = '11px "Noto Sans SC"';
-                    ctx.fillStyle = '#7ab68a';
-                    ctx.textAlign = 'right';
-                    ctx.fillText(label, padding.left - 8, y + 4);
-                });
+                    // 绘制背景网格
+                    ctx.strokeStyle = '#e0ede0';
+                    ctx.lineWidth = 1;
 
-                // X轴标签
-                ctx.textAlign = 'center';
-                ctx.font = '12px "Noto Sans SC"';
-                weekdays.forEach((day, index) => {
-                    const x = padding.left + (chartWidth / 6) * index;
-                    ctx.fillStyle = '#4a7c59';
-                    ctx.fillText(day, x, canvas.height - 10);
-                });
+                    const yLabels = ['100%', '80%', '60%', '40%', '20%', '0%'];
+                    yLabels.forEach((label, index) => {
+                        const y = padding.top + (chartHeight / 5) * index;
 
-                if (this.routines.length > 0) {
-                    // 绘制渐变填充
-                    const gradient = ctx.createLinearGradient(0, padding.top, 0, padding.top + chartHeight);
-                    gradient.addColorStop(0, 'rgba(74, 124, 89, 0.3)');
-                    gradient.addColorStop(1, 'rgba(74, 124, 89, 0.02)');
-
-                    ctx.beginPath();
-                    ctx.moveTo(padding.left, padding.top + chartHeight);
-
-                    completionRates.forEach((rate, index) => {
-                        const x = padding.left + (chartWidth / 6) * index;
-                        const y = padding.top + chartHeight - (rate / 100) * chartHeight;
-
-                        if (index === 0) {
-                            ctx.lineTo(x, y);
-                        } else {
-                            // 使用贝塞尔曲线平滑连接
-                            const prevX = padding.left + (chartWidth / 6) * (index - 1);
-                            const prevY = padding.top + chartHeight - (completionRates[index - 1] / 100) * chartHeight;
-                            const cpX = (prevX + x) / 2;
-                            ctx.bezierCurveTo(cpX, prevY, cpX, y, x, y);
-                        }
-                    });
-
-                    ctx.lineTo(canvas.width - padding.right, padding.top + chartHeight);
-                    ctx.closePath();
-                    ctx.fillStyle = gradient;
-                    ctx.fill();
-
-                    // 绘制折线
-                    ctx.beginPath();
-                    ctx.strokeStyle = '#4a7c59';
-                    ctx.lineWidth = 3;
-                    ctx.lineJoin = 'round';
-                    ctx.lineCap = 'round';
-
-                    completionRates.forEach((rate, index) => {
-                        const x = padding.left + (chartWidth / 6) * index;
-                        const y = padding.top + chartHeight - (rate / 100) * chartHeight;
-
-                        if (index === 0) {
-                            ctx.moveTo(x, y);
-                        } else {
-                            const prevX = padding.left + (chartWidth / 6) * (index - 1);
-                            const prevY = padding.top + chartHeight - (completionRates[index - 1] / 100) * chartHeight;
-                            const cpX = (prevX + x) / 2;
-                            ctx.bezierCurveTo(cpX, prevY, cpX, y, x, y);
-                        }
-                    });
-
-                    ctx.stroke();
-
-                    // 绘制数据点
-                    completionRates.forEach((rate, index) => {
-                        const x = padding.left + (chartWidth / 6) * index;
-                        const y = padding.top + chartHeight - (rate / 100) * chartHeight;
-
-                        // 外圈光晕
                         ctx.beginPath();
-                        ctx.arc(x, y, 8, 0, Math.PI * 2);
-                        ctx.fillStyle = 'rgba(74, 124, 89, 0.15)';
-                        ctx.fill();
-
-                        // 内圈
-                        ctx.beginPath();
-                        ctx.arc(x, y, 4, 0, Math.PI * 2);
-                        ctx.fillStyle = '#4a7c59';
-                        ctx.fill();
-                        ctx.strokeStyle = 'white';
-                        ctx.lineWidth = 2;
+                        ctx.moveTo(padding.left, y);
+                        ctx.lineTo(canvas.width - padding.right, y);
                         ctx.stroke();
+
+                        ctx.font = '11px "Noto Sans SC"';
+                        ctx.fillStyle = '#7ab68a';
+                        ctx.textAlign = 'right';
+                        ctx.fillText(label, padding.left - 8, y + 4);
                     });
+
+                    // X轴标签
+                    ctx.textAlign = 'center';
+                    ctx.font = '12px "Noto Sans SC"';
+                    weekdays.forEach((day, index) => {
+                        const x = padding.left + (chartWidth / 6) * index;
+                        ctx.fillStyle = '#4a7c59';
+                        ctx.fillText(day, x, canvas.height - 10);
+                    });
+
+                    if (this.routines.length > 0) {
+                        // 计算动画中的完成率
+                        const animatedRates = completionRates.map(rate => rate * easedProgress);
+
+                        // 绘制渐变填充
+                        const gradient = ctx.createLinearGradient(0, padding.top, 0, padding.top + chartHeight);
+                        gradient.addColorStop(0, 'rgba(74, 124, 89, 0.3)');
+                        gradient.addColorStop(1, 'rgba(74, 124, 89, 0.02)');
+
+                        ctx.beginPath();
+                        ctx.moveTo(padding.left, padding.top + chartHeight);
+
+                        animatedRates.forEach((rate, index) => {
+                            const x = padding.left + (chartWidth / 6) * index;
+                            const y = padding.top + chartHeight - (rate / 100) * chartHeight;
+
+                            if (index === 0) {
+                                ctx.lineTo(x, y);
+                            } else {
+                                const prevX = padding.left + (chartWidth / 6) * (index - 1);
+                                const prevY = padding.top + chartHeight - (animatedRates[index - 1] / 100) * chartHeight;
+                                const cpX = (prevX + x) / 2;
+                                ctx.bezierCurveTo(cpX, prevY, cpX, y, x, y);
+                            }
+                        });
+
+                        ctx.lineTo(canvas.width - padding.right, padding.top + chartHeight);
+                        ctx.closePath();
+                        ctx.fillStyle = gradient;
+                        ctx.fill();
+
+                        // 绘制折线
+                        ctx.beginPath();
+                        ctx.strokeStyle = '#4a7c59';
+                        ctx.lineWidth = 3;
+                        ctx.lineJoin = 'round';
+                        ctx.lineCap = 'round';
+
+                        animatedRates.forEach((rate, index) => {
+                            const x = padding.left + (chartWidth / 6) * index;
+                            const y = padding.top + chartHeight - (rate / 100) * chartHeight;
+
+                            if (index === 0) {
+                                ctx.moveTo(x, y);
+                            } else {
+                                const prevX = padding.left + (chartWidth / 6) * (index - 1);
+                                const prevY = padding.top + chartHeight - (animatedRates[index - 1] / 100) * chartHeight;
+                                const cpX = (prevX + x) / 2;
+                                ctx.bezierCurveTo(cpX, prevY, cpX, y, x, y);
+                            }
+                        });
+
+                        ctx.stroke();
+
+                        // 绘制数据点
+                        animatedRates.forEach((rate, index) => {
+                            const x = padding.left + (chartWidth / 6) * index;
+                            const y = padding.top + chartHeight - (rate / 100) * chartHeight;
+
+                            // 外圈光晕
+                            ctx.beginPath();
+                            ctx.arc(x, y, 8, 0, Math.PI * 2);
+                            ctx.fillStyle = 'rgba(74, 124, 89, 0.15)';
+                            ctx.fill();
+
+                            // 内圈
+                            ctx.beginPath();
+                            ctx.arc(x, y, 4, 0, Math.PI * 2);
+                            ctx.fillStyle = '#4a7c59';
+                            ctx.fill();
+                            ctx.strokeStyle = 'white';
+                            ctx.lineWidth = 2;
+                            ctx.stroke();
+                        });
+                    }
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    }
                 }
+
+                requestAnimationFrame(animate);
             }
 
             openDeleteModal(id) {
