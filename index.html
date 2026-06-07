@@ -668,6 +668,61 @@
             color: var(--color-text-disabled);
         }
 
+        /* 待办总览 */
+        .overview-date-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-top: var(--space-4);
+            margin-bottom: var(--space-3);
+            padding-bottom: var(--space-2);
+            border-bottom: 1px solid var(--color-primary-lighter);
+        }
+
+        .overview-date-title:first-child {
+            margin-top: 0;
+        }
+
+        .overview-todo-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+            padding: var(--space-2) 0;
+        }
+
+        .overview-todo-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--color-primary-lighter);
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        .overview-todo-content {
+            flex: 1;
+        }
+
+        .overview-todo-title {
+            font-family: var(--font-serif);
+            font-size: 14px;
+            color: var(--color-text-primary);
+        }
+
+        .overview-todo-deadline {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            margin-top: 2px;
+        }
+
+        .overview-empty {
+            text-align: center;
+            padding: var(--space-6);
+            color: var(--color-text-muted);
+            font-family: var(--font-serif);
+        }
+
         /* 自定义时分选择器 */
         .time-picker {
             display: flex;
@@ -1619,6 +1674,24 @@
             添加待办
         </button>
 
+        <!-- 待办总览悬浮按钮 -->
+        <button class="fab" id="overview-todo-btn" style="right: 130px;">
+            待办总览
+        </button>
+
+        <!-- 待办总览弹窗 -->
+        <div class="modal-overlay" id="overview-modal">
+            <div class="modal" style="max-height: 75vh;">
+                <div class="modal-header">
+                    <h3>待办总览</h3>
+                    <button class="modal-close">×</button>
+                </div>
+                <div class="modal-body" id="overview-content" style="overflow-y: auto; max-height: calc(75vh - 120px);">
+                    <!-- 内容将通过 JavaScript 动态生成 -->
+                </div>
+            </div>
+        </div>
+
         <!-- 添加/编辑待办模态框 -->
         <div class="modal-overlay" id="todo-modal">
             <div class="modal">
@@ -2277,6 +2350,58 @@
                 document.getElementById('progress-fill').style.width = `${percent}%`;
             }
 
+            renderOverview() {
+                const overviewContent = document.getElementById('overview-content');
+
+                // 获取所有未完成的待办
+                const incompleteTodos = this.todos.filter(t => !t.completed);
+
+                if (incompleteTodos.length === 0) {
+                    overviewContent.innerHTML = '<div class="overview-empty">暂无未完成的待办</div>';
+                    return;
+                }
+
+                // 按日期分组
+                const todosByDate = {};
+                incompleteTodos.forEach(todo => {
+                    if (!todosByDate[todo.date]) {
+                        todosByDate[todo.date] = [];
+                    }
+                    todosByDate[todo.date].push(todo);
+                });
+
+                // 按日期排序（从早到晚）
+                const sortedDates = Object.keys(todosByDate).sort();
+
+                // 生成 HTML
+                let html = '';
+                sortedDates.forEach(date => {
+                    const todos = todosByDate[date];
+                    const dateObj = new Date(date + 'T00:00:00');
+                    const weekday = ['日', '一', '二', '三', '四', '五', '六'][dateObj.getDay()];
+                    const dateStr = date.replace(/-/g, '.');
+
+                    html += `<div class="overview-date-title">${dateStr}（周${weekday}）</div>`;
+
+                    todos.forEach(todo => {
+                        const hasDeadline = todo.deadlineHour !== null;
+                        const deadlineStr = hasDeadline ? `截止 ${String(todo.deadlineHour).padStart(2, '0')}:${String(todo.deadlineMinute).padStart(2, '0')}` : '';
+
+                        html += `
+                            <div class="overview-todo-item">
+                                <div class="overview-todo-dot"></div>
+                                <div class="overview-todo-content">
+                                    <div class="overview-todo-title">${todo.title}</div>
+                                    ${hasDeadline ? `<div class="overview-todo-deadline">${deadlineStr}</div>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                });
+
+                overviewContent.innerHTML = html;
+            }
+
             updatePieChart(todos) {
                 const canvas = document.getElementById('pie-chart');
                 const ctx = canvas.getContext('2d');
@@ -2378,6 +2503,12 @@
                     document.getElementById('reminder-hour-display').textContent = '时';
                     document.getElementById('reminder-minute-display').textContent = '分';
                     todoModal.open();
+                });
+
+                // 待办总览按钮
+                document.getElementById('overview-todo-btn').addEventListener('click', () => {
+                    this.renderOverview();
+                    overviewModal.open();
                 });
 
                 document.getElementById('todo-submit-btn').addEventListener('click', () => {
@@ -3097,6 +3228,7 @@
         let todoModal;
         let completeModal;
         let deleteModal;
+        let overviewModal;
         let routineList;
         let routineModal;
         let routineDeleteModal;
@@ -3107,6 +3239,7 @@
             todoModal = new Modal('todo-modal');
             completeModal = new Modal('complete-modal');
             deleteModal = new Modal('delete-modal');
+            overviewModal = new Modal('overview-modal');
             todoList = new TodoList();
             routineModal = new Modal('routine-modal');
             routineDeleteModal = new Modal('routine-delete-modal');
