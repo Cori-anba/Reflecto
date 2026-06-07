@@ -2960,27 +2960,35 @@
                 // 未来日期不计算完成度
                 if (date > today) return 0;
 
+                const dateMonth = date.getMonth();
+                const dateYear = date.getFullYear();
+
+                // 获取当日日程
                 const todos = JSON.parse(localStorage.getItem('reflecto_todos') || '[]');
                 const dayTodos = todos.filter(t => t.date === dateString);
                 const completedTodos = dayTodos.filter(t => t.completed).length;
 
-                // 只计算在该日期之前（含当天）创建的恒例
+                // 获取当日对应的恒例（从创建日所在月份的1号开始生效）
                 const routines = JSON.parse(localStorage.getItem('reflecto_routines') || '[]');
-                const dateEnd = new Date(date);
-                dateEnd.setHours(23, 59, 59, 999);
                 const validRoutines = routines.filter(r => {
                     const createdDate = new Date(parseInt(r.id));
-                    createdDate.setHours(0, 0, 0, 0);
-                    return createdDate <= dateEnd;
+                    const createdMonth = createdDate.getMonth();
+                    const createdYear = createdDate.getFullYear();
+                    // 恒例从创建月份的1号开始生效
+                    if (createdYear < dateYear) return true;
+                    if (createdYear === dateYear && createdMonth <= dateMonth) return true;
+                    return false;
                 });
                 const completedRoutines = validRoutines.filter(r => r.completions[dateString]).length;
 
-                const totalTasks = dayTodos.length + validRoutines.length;
-                const totalCompleted = completedTodos + completedRoutines;
+                // A = 完成的日程 + 打勾的恒例
+                // B = 当日日程 + 当日恒例
+                const A = completedTodos + completedRoutines;
+                const B = dayTodos.length + validRoutines.length;
 
-                if (totalTasks === 0) return 0;
+                if (B === 0) return 0;
 
-                const completionRate = totalCompleted / totalTasks;
+                const completionRate = A / B;
 
                 if (completionRate === 0) return 0;
                 if (completionRate <= 0.25) return 1;
@@ -3001,13 +3009,12 @@
                 if (today.getFullYear() === year && today.getMonth() === month) {
                     daysElapsed = today.getDate();
                 } else if (today.getFullYear() > year || (today.getFullYear() === year && today.getMonth() > month)) {
-                    // 查看的是过去的月份
                     daysElapsed = daysInMonth;
                 } else {
-                    // 查看的是未来的月份
                     daysElapsed = 0;
                 }
 
+                // 获取本月日程
                 const todos = JSON.parse(localStorage.getItem('reflecto_todos') || '[]');
                 const monthTodos = todos.filter(t => {
                     const todoDate = new Date(t.date);
@@ -3015,49 +3022,49 @@
                 });
                 const completedTodos = monthTodos.filter(t => t.completed);
 
-                // 获取恒例，只包含在本月1号之前或当天创建的恒例
+                // 获取恒例
                 const routines = JSON.parse(localStorage.getItem('reflecto_routines') || '[]');
-                const monthStart = new Date(year, month, 1);
-                monthStart.setHours(0, 0, 0, 0);
 
-                // 计算本月每天的有效恒例数和完成数
+                // 计算当天对应的有效恒例数（用于"每日恒例"显示）
+                const todayRoutines = routines.filter(r => {
+                    const createdDate = new Date(parseInt(r.id));
+                    const createdMonth = createdDate.getMonth();
+                    const createdYear = createdDate.getFullYear();
+                    if (createdYear < year) return true;
+                    if (createdYear === year && createdMonth <= month) return true;
+                    return false;
+                });
+
+                // 计算本月已完成恒例数（从1号到今天）
                 let totalRoutinesCompleted = 0;
-                let totalValidRoutineDays = 0;
-
                 for (let day = 1; day <= daysElapsed; day++) {
                     const date = new Date(year, month, day);
-                    date.setHours(0, 0, 0, 0);
                     const dateString = this.formatDate(date);
 
-                    // 只计算在该日期之前（含当天）创建的恒例
-                    const dateEnd = new Date(year, month, day, 23, 59, 59);
+                    // 当天对应的恒例
                     const routinesForDay = routines.filter(r => {
                         const createdDate = new Date(parseInt(r.id));
-                        createdDate.setHours(0, 0, 0, 0);
-                        return createdDate <= dateEnd;
+                        const createdMonth = createdDate.getMonth();
+                        const createdYear = createdDate.getFullYear();
+                        if (createdYear < year) return true;
+                        if (createdYear === year && createdMonth <= month) return true;
+                        return false;
                     });
 
                     totalRoutinesCompleted += routinesForDay.filter(r => r.completions[dateString]).length;
                 }
 
-                // 获取本月1号之前创建的恒例数（用于月完成度计算）
-                const validRoutinesForMonth = routines.filter(r => {
-                    const createdDate = new Date(parseInt(r.id));
-                    createdDate.setHours(0, 0, 0, 0);
-                    return createdDate < monthStart;
-                });
-
-                // 每日平均完成恒例 = 本月1号到今天完成的恒例总数 / 今天日期
+                // 每日平均完成恒例 = 本月已完成恒例数 / 当天日期
                 const avgRoutines = daysElapsed > 0 ? (totalRoutinesCompleted / daysElapsed).toFixed(1) : 0;
 
-                // 月完成度计算
-                const totalTasks = monthTodos.length + (validRoutinesForMonth.length * daysInMonth);
-                const totalCompleted = completedTodos.length + totalRoutinesCompleted;
-                const monthlyCompletion = totalTasks > 0 ? Math.round((totalCompleted / totalTasks) * 100) : 0;
+                // 月完成度 = (已完成日程 + 已完成恒例) / (已添加日程 + 本月天数 × 每日恒例数)
+                const A = completedTodos.length + totalRoutinesCompleted;
+                const B = monthTodos.length + (daysInMonth * todayRoutines.length);
+                const monthlyCompletion = B > 0 ? Math.round((A / B) * 100) : 0;
 
                 document.getElementById('stat-todos-added').textContent = `${monthTodos.length} 条`;
                 document.getElementById('stat-todos-completed').textContent = `${completedTodos.length} 条`;
-                document.getElementById('stat-routines-total').textContent = `${validRoutinesForMonth.length} 条`;
+                document.getElementById('stat-routines-total').textContent = `${todayRoutines.length} 条`;
                 document.getElementById('stat-routines-avg').textContent = `${avgRoutines} 条`;
                 document.getElementById('stat-monthly-completion').textContent = `${monthlyCompletion}%`;
             }
