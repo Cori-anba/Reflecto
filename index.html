@@ -7,40 +7,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* 主色调 - 自然绿意 */
             --color-primary: #4a7c59;
             --color-primary-light: #7ab68a;
             --color-primary-lighter: #a8d5b8;
             --color-primary-bg: #f5f8f5;
             --color-card-bg: #ffffff;
-
-            /* 文字颜色 */
             --color-text-primary: #2d5a2d;
             --color-text-secondary: #4a7c59;
             --color-text-muted: #7ab68a;
             --color-text-disabled: #c4d8c4;
-
-            /* 功能色 */
             --color-danger: #e88a8a;
             --color-danger-bg: #fef0f0;
-
-            /* 字体 */
+            --color-warning: #e89a4a;
             --font-serif: 'Zen Old Mincho', serif;
             --font-sans: 'Noto Sans SC', sans-serif;
-
-            /* 圆角 */
             --radius-sm: 4px;
             --radius-md: 8px;
             --radius-lg: 12px;
             --radius-xl: 16px;
             --radius-2xl: 20px;
-
-            /* 阴影 */
             --shadow-sm: 0 1px 4px rgba(45, 90, 45, 0.06);
             --shadow-md: 0 2px 12px rgba(45, 90, 45, 0.08);
             --shadow-lg: 0 4px 16px rgba(45, 90, 45, 0.1);
-
-            /* 间距 */
             --space-1: 4px;
             --space-2: 8px;
             --space-3: 12px;
@@ -71,7 +59,6 @@
             flex-direction: column;
         }
 
-        /* 滚动条样式 */
         ::-webkit-scrollbar {
             width: 4px;
             height: 4px;
@@ -86,7 +73,6 @@
             border-radius: 2px;
         }
 
-        /* 按钮基础样式 */
         button {
             font-family: inherit;
             cursor: pointer;
@@ -95,7 +81,6 @@
             outline: none;
         }
 
-        /* 输入框基础样式 */
         input, textarea, select {
             font-family: inherit;
             font-size: inherit;
@@ -108,14 +93,14 @@
             top: 0;
             z-index: 100;
             background-color: var(--color-card-bg);
-            padding: var(--space-4) var(--space-5);
+            padding: var(--space-3) var(--space-5);
             text-align: center;
             border-bottom: 1px solid var(--color-primary-lighter);
         }
 
         .slogan-bar span {
             font-family: var(--font-sans);
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
             color: var(--color-text-primary);
             letter-spacing: 2px;
@@ -177,20 +162,20 @@
             font-family: var(--font-serif);
         }
 
-        /* 日期选择器 */
+        /* 日期选择器 - 更小的卡片 */
         .date-picker {
             display: flex;
             align-items: center;
-            gap: var(--space-3);
-            margin-bottom: var(--space-5);
+            gap: var(--space-2);
+            margin-bottom: var(--space-4);
         }
 
         .date-scroll {
             flex: 1;
             display: flex;
-            gap: var(--space-2);
+            gap: 6px;
             overflow-x: auto;
-            padding: var(--space-2) 0;
+            padding: var(--space-1) 0;
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
         }
@@ -204,15 +189,15 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: var(--space-1);
-            padding: var(--space-3) var(--space-3);
-            border-radius: var(--radius-lg);
+            gap: 2px;
+            padding: 6px 10px;
+            border-radius: var(--radius-md);
             background-color: var(--color-card-bg);
             box-shadow: var(--shadow-sm);
             cursor: pointer;
             transition: all 0.2s ease;
             scroll-snap-align: center;
-            min-width: 56px;
+            min-width: 48px;
         }
 
         .date-item:hover {
@@ -221,18 +206,17 @@
 
         .date-item.active {
             background-color: rgba(74, 124, 89, 0.15);
-            border: 2px solid var(--color-primary);
-            box-shadow: var(--shadow-md);
+            border: 1.5px solid var(--color-primary);
         }
 
         .date-weekday {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--color-text-muted);
         }
 
         .date-day {
             font-family: var(--font-serif);
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--color-text-secondary);
         }
@@ -246,13 +230,12 @@
             color: var(--color-text-primary);
         }
 
+        /* 日历按钮 - 无底色，纯线条 */
         .calendar-btn {
             flex-shrink: 0;
-            width: 44px;
-            height: 44px;
-            border-radius: var(--radius-lg);
-            background-color: var(--color-card-bg);
-            box-shadow: var(--shadow-sm);
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -261,14 +244,12 @@
         }
 
         .calendar-btn:hover {
-            box-shadow: var(--shadow-md);
-            background-color: var(--color-primary);
-            color: white;
+            color: var(--color-text-primary);
         }
 
         .calendar-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
         }
 
         /* 待办列表 */
@@ -283,11 +264,34 @@
             display: flex;
             align-items: center;
             gap: var(--space-3);
-            padding: var(--space-4);
+            padding: var(--space-3) var(--space-4);
             background-color: var(--color-card-bg);
             border: 1px solid var(--color-primary-lighter);
             border-radius: var(--radius-lg);
             transition: all 0.3s ease;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(20px);
+            }
         }
 
         .todo-item.completed {
@@ -297,8 +301,8 @@
 
         .todo-checkbox {
             flex-shrink: 0;
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             border: 2px solid var(--color-primary-lighter);
             border-radius: var(--radius-sm);
             cursor: pointer;
@@ -320,8 +324,8 @@
         .todo-checkbox.checked::after {
             content: '';
             display: block;
-            width: 6px;
-            height: 10px;
+            width: 5px;
+            height: 9px;
             border: solid white;
             border-width: 0 2px 2px 0;
             transform: rotate(45deg) translateY(-1px);
@@ -334,9 +338,9 @@
 
         .todo-title {
             font-family: var(--font-serif);
-            font-size: 15px;
+            font-size: 14px;
             color: var(--color-text-primary);
-            margin-bottom: var(--space-1);
+            margin-bottom: 2px;
         }
 
         .todo-item.completed .todo-title {
@@ -347,22 +351,41 @@
         .todo-meta {
             font-size: 12px;
             color: var(--color-text-muted);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .todo-meta .deadline {
+            text-decoration: none;
+        }
+
+        .todo-item.completed .todo-meta .deadline {
+            text-decoration: line-through;
+        }
+
+        .todo-meta .separator {
+            color: var(--color-text-disabled);
+        }
+
+        .todo-meta .duration {
+            color: var(--color-primary);
         }
 
         .todo-actions {
             display: flex;
-            gap: var(--space-2);
+            gap: var(--space-1);
             flex-shrink: 0;
         }
 
         .todo-action {
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            opacity: 0.6;
+            opacity: 0.5;
             transition: opacity 0.2s ease;
         }
 
@@ -371,8 +394,8 @@
         }
 
         .todo-action svg {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
         }
 
         .todo-action.edit {
@@ -387,7 +410,7 @@
         .progress-section {
             background-color: var(--color-card-bg);
             border-radius: var(--radius-xl);
-            padding: var(--space-5);
+            padding: var(--space-4);
             margin-bottom: var(--space-5);
             box-shadow: var(--shadow-sm);
         }
@@ -396,63 +419,72 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--space-3);
+            margin-bottom: var(--space-2);
         }
 
         .progress-label {
             font-family: var(--font-serif);
-            font-size: 14px;
+            font-size: 13px;
             color: var(--color-text-secondary);
         }
 
         .progress-percent {
             font-family: var(--font-serif);
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--color-text-primary);
         }
 
         .progress-bar {
-            height: 8px;
+            height: 6px;
             background-color: var(--color-primary-bg);
-            border-radius: 4px;
+            border-radius: 3px;
             overflow: hidden;
         }
 
         .progress-fill {
             height: 100%;
             background-color: var(--color-primary);
-            border-radius: 4px;
+            border-radius: 3px;
             transition: width 0.3s ease;
             width: 0%;
         }
 
-        /* 饼状图 */
+        /* 饼状图 - 重新设计 */
         .chart-section {
             background-color: var(--color-card-bg);
             border-radius: var(--radius-xl);
-            padding: var(--space-5);
+            padding: var(--space-4);
             margin-bottom: var(--space-5);
             box-shadow: var(--shadow-sm);
         }
 
         .chart-title {
             font-family: var(--font-serif);
-            font-size: 14px;
+            font-size: 13px;
             color: var(--color-text-muted);
             text-align: center;
-            margin-bottom: var(--space-4);
+            margin-bottom: var(--space-3);
             letter-spacing: 1px;
         }
 
         .chart-container {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: var(--space-5);
         }
 
+        .pie-chart-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+        }
+
         #pie-chart {
-            flex-shrink: 0;
+            width: 140px;
+            height: 140px;
+            filter: drop-shadow(0 2px 8px rgba(45, 90, 45, 0.15));
         }
 
         .chart-legend {
@@ -474,6 +506,7 @@
             height: 10px;
             border-radius: 50%;
             flex-shrink: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         /* 悬浮按钮 */
@@ -481,8 +514,8 @@
             position: fixed;
             bottom: 90px;
             right: 20px;
-            width: 56px;
-            height: 56px;
+            width: 52px;
+            height: 52px;
             border-radius: var(--radius-xl);
             background-color: var(--color-primary);
             color: white;
@@ -500,8 +533,8 @@
         }
 
         .fab svg {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
         }
 
         /* 模态框 */
@@ -530,8 +563,8 @@
             background-color: var(--color-card-bg);
             border-radius: var(--radius-2xl);
             width: 90%;
-            max-width: 400px;
-            max-height: 90vh;
+            max-width: 360px;
+            max-height: 85vh;
             overflow-y: auto;
             box-shadow: var(--shadow-lg);
             transform: scale(0.9);
@@ -543,31 +576,31 @@
         }
 
         .modal-sm {
-            max-width: 320px;
+            max-width: 300px;
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--space-5) var(--space-5) var(--space-4);
+            padding: var(--space-4) var(--space-4) var(--space-3);
         }
 
         .modal-header h3 {
             font-family: var(--font-serif);
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             color: var(--color-text-primary);
         }
 
         .modal-close {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
             color: var(--color-text-muted);
             transition: background-color 0.2s ease;
         }
@@ -577,32 +610,32 @@
         }
 
         .modal-body {
-            padding: 0 var(--space-5) var(--space-4);
+            padding: 0 var(--space-4) var(--space-3);
         }
 
         .modal-footer {
             display: flex;
             gap: var(--space-3);
-            padding: var(--space-4) var(--space-5) var(--space-5);
+            padding: var(--space-3) var(--space-4) var(--space-4);
         }
 
         .form-group {
-            margin-bottom: var(--space-4);
+            margin-bottom: var(--space-3);
         }
 
         .form-label {
             display: block;
             font-size: 12px;
             color: var(--color-text-muted);
-            margin-bottom: var(--space-2);
+            margin-bottom: var(--space-1);
         }
 
         .form-input {
             width: 100%;
-            padding: var(--space-3) var(--space-4);
+            padding: var(--space-2) var(--space-3);
             background-color: var(--color-primary-bg);
             border: none;
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
             font-size: 14px;
             color: var(--color-text-primary);
             transition: all 0.2s ease;
@@ -616,33 +649,134 @@
             color: var(--color-text-disabled);
         }
 
+        /* 自定义时分选择器 */
         .time-picker {
             display: flex;
             align-items: center;
             gap: var(--space-2);
         }
 
-        .time-select {
+        .time-display {
             flex: 1;
-            padding: var(--space-3) var(--space-4);
+            padding: var(--space-2) var(--space-3);
             background-color: var(--color-primary-bg);
             border: none;
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
             font-size: 14px;
             color: var(--color-text-primary);
             cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .time-display:hover {
+            box-shadow: 0 0 0 2px var(--color-primary-lighter);
         }
 
         .time-separator {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             color: var(--color-text-primary);
         }
 
+        /* 时分选择弹窗 */
+        .time-picker-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(45, 90, 45, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .time-picker-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .time-picker-content {
+            background-color: var(--color-card-bg);
+            border-radius: var(--radius-xl);
+            padding: var(--space-4);
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.9);
+            transition: transform 0.2s ease;
+        }
+
+        .time-picker-modal.active .time-picker-content {
+            transform: scale(1);
+        }
+
+        .time-picker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-3);
+        }
+
+        .time-picker-title {
+            font-family: var(--font-serif);
+            font-size: 14px;
+            color: var(--color-text-primary);
+        }
+
+        .time-picker-confirm {
+            font-family: var(--font-serif);
+            font-size: 14px;
+            color: var(--color-primary);
+            cursor: pointer;
+        }
+
+        .time-scroll-container {
+            display: flex;
+            gap: var(--space-3);
+            justify-content: center;
+        }
+
+        .time-scroll {
+            width: 70px;
+            height: 180px;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .time-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .time-scroll-item {
+            padding: var(--space-2) var(--space-3);
+            text-align: center;
+            font-family: var(--font-serif);
+            font-size: 16px;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+        }
+
+        .time-scroll-item:hover {
+            background-color: var(--color-primary-bg);
+        }
+
+        .time-scroll-item.selected {
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: 600;
+        }
+
         .btn {
             flex: 1;
-            padding: var(--space-4);
-            border-radius: var(--radius-lg);
+            padding: var(--space-3);
+            border-radius: var(--radius-md);
             font-family: var(--font-serif);
             font-size: 14px;
             font-weight: 500;
@@ -680,29 +814,29 @@
         .complete-event-name {
             text-align: center;
             font-family: var(--font-serif);
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             color: var(--color-text-primary);
-            margin-bottom: var(--space-5);
-            padding: var(--space-4);
+            margin-bottom: var(--space-4);
+            padding: var(--space-3);
             background-color: var(--color-primary-bg);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
         }
 
         .duration-options {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-3);
-            margin-bottom: var(--space-4);
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-2);
+            margin-bottom: var(--space-3);
         }
 
         .duration-btn {
-            padding: var(--space-3) var(--space-4);
+            padding: var(--space-2) var(--space-3);
             background-color: var(--color-primary-bg);
             border: none;
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
             font-family: var(--font-serif);
-            font-size: 14px;
+            font-size: 13px;
             color: var(--color-primary);
             cursor: pointer;
             transition: all 0.2s ease;
@@ -717,6 +851,15 @@
             color: white;
         }
 
+        .duration-btn.no-duration {
+            color: var(--color-warning);
+        }
+
+        .duration-btn.no-duration.selected {
+            background-color: var(--color-warning);
+            color: white;
+        }
+
         .custom-duration-input {
             display: flex;
             align-items: center;
@@ -728,23 +871,23 @@
         }
 
         .duration-unit {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--color-text-muted);
             flex-shrink: 0;
         }
 
         .delete-icon {
             text-align: center;
-            font-size: 48px;
-            margin-bottom: var(--space-4);
+            font-size: 40px;
+            margin-bottom: var(--space-3);
         }
 
         .delete-message {
             text-align: center;
             font-family: var(--font-serif);
-            font-size: 16px;
+            font-size: 14px;
             color: var(--color-text-primary);
-            margin-bottom: var(--space-4);
+            margin-bottom: var(--space-3);
         }
 
         /* 周选择器 */
@@ -752,13 +895,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: var(--space-5);
-            margin-bottom: var(--space-5);
+            gap: var(--space-4);
+            margin-bottom: var(--space-4);
         }
 
         .week-btn {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background-color: var(--color-card-bg);
             box-shadow: var(--shadow-sm);
@@ -775,8 +918,8 @@
         }
 
         .week-btn svg {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
         }
 
         .week-range {
@@ -786,7 +929,7 @@
             color: var(--color-text-primary);
         }
 
-        /* 恒例表格 */
+        /* 恒例表格 - 修复对齐 */
         .routine-table {
             background-color: var(--color-card-bg);
             border-radius: var(--radius-xl);
@@ -795,38 +938,33 @@
             margin-bottom: var(--space-5);
         }
 
-        .table-dates {
+        .table-header {
             display: grid;
-            grid-template-columns: 90px repeat(7, 1fr);
-            gap: 1px;
-            background-color: var(--color-primary-lighter);
-            padding: var(--space-3) 0;
+            grid-template-columns: 80px repeat(7, 1fr);
+            background-color: var(--color-primary);
+            color: white;
         }
 
-        .table-date {
+        .table-header-cell {
+            padding: var(--space-2) var(--space-1);
             text-align: center;
-            font-family: var(--font-serif);
             font-size: 11px;
-            color: var(--color-text-muted);
-        }
-
-        .table-date .weekday {
-            margin-bottom: var(--space-1);
-        }
-
-        .table-date .day {
-            font-size: 12px;
             font-weight: 600;
-            color: var(--color-text-secondary);
         }
 
-        .table-date.today {
-            color: var(--color-primary);
-        }
-
-        .table-date.today .day {
-            color: var(--color-primary);
+        .table-header-cell .weekday {
+            font-family: var(--font-serif);
             font-weight: 700;
+        }
+
+        .table-header-cell .day {
+            font-size: 10px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .table-header-cell.today {
+            background-color: rgba(255,255,255,0.2);
         }
 
         .table-content {
@@ -836,10 +974,8 @@
 
         .table-row {
             display: grid;
-            grid-template-columns: 90px repeat(7, 1fr);
-            gap: 1px;
-            background-color: var(--color-primary-lighter);
-            border-bottom: 1px solid var(--color-primary-lighter);
+            grid-template-columns: 80px repeat(7, 1fr);
+            border-bottom: 1px solid #e0ede0;
         }
 
         .table-row:last-child {
@@ -847,8 +983,7 @@
         }
 
         .table-cell {
-            background-color: var(--color-card-bg);
-            padding: var(--space-3);
+            padding: var(--space-2);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -856,8 +991,9 @@
 
         .table-cell.routine-info {
             flex-direction: column;
-            gap: var(--space-1);
+            gap: 2px;
             position: relative;
+            border-right: 1px solid #e0ede0;
         }
 
         .routine-name {
@@ -905,7 +1041,7 @@
         }
 
         .routine-checkbox.disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
         }
 
@@ -913,7 +1049,7 @@
             display: flex;
             gap: var(--space-1);
             position: absolute;
-            right: var(--space-2);
+            right: 4px;
             top: 50%;
             transform: translateY(-50%);
             opacity: 0;
@@ -925,8 +1061,8 @@
         }
 
         .routine-action {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -935,15 +1071,15 @@
         }
 
         .routine-action svg {
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
         }
 
-        /* 折线图 */
+        /* 折线图 - 重新设计 */
         .line-chart-section {
             background-color: var(--color-card-bg);
             border-radius: var(--radius-xl);
-            padding: var(--space-5);
+            padding: var(--space-4);
             box-shadow: var(--shadow-sm);
         }
 
@@ -953,7 +1089,9 @@
         }
 
         #line-chart {
-            min-width: 300px;
+            width: 100%;
+            min-width: 280px;
+            height: 180px;
         }
 
         /* 月份选择器 */
@@ -961,13 +1099,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: var(--space-5);
-            margin-bottom: var(--space-5);
+            gap: var(--space-4);
+            margin-bottom: var(--space-4);
         }
 
         .month-btn {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background-color: var(--color-card-bg);
             box-shadow: var(--shadow-sm);
@@ -984,13 +1122,13 @@
         }
 
         .month-btn svg {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
         }
 
         .month-title {
             font-family: var(--font-serif);
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             color: var(--color-text-primary);
         }
@@ -999,7 +1137,7 @@
         .heatmap-calendar {
             background-color: var(--color-card-bg);
             border-radius: var(--radius-xl);
-            padding: var(--space-5);
+            padding: var(--space-4);
             box-shadow: var(--shadow-sm);
             margin-bottom: var(--space-5);
         }
@@ -1007,8 +1145,8 @@
         .calendar-header {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: var(--space-2);
-            margin-bottom: var(--space-3);
+            gap: 4px;
+            margin-bottom: var(--space-2);
         }
 
         .calendar-weekday {
@@ -1016,13 +1154,13 @@
             font-family: var(--font-serif);
             font-size: 12px;
             color: var(--color-text-muted);
-            padding: var(--space-2) 0;
+            padding: var(--space-1) 0;
         }
 
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: var(--space-2);
+            gap: 4px;
         }
 
         .calendar-day {
@@ -1056,12 +1194,10 @@
 
         .calendar-day.level-1 {
             background-color: #d4e8da;
-            color: var(--color-text-primary);
         }
 
         .calendar-day.level-2 {
             background-color: #a8d5b8;
-            color: var(--color-text-primary);
         }
 
         .calendar-day.level-3 {
@@ -1077,23 +1213,23 @@
         .calendar-legend {
             display: flex;
             justify-content: center;
-            gap: var(--space-4);
-            margin-top: var(--space-4);
-            padding-top: var(--space-4);
+            gap: var(--space-3);
+            margin-top: var(--space-3);
+            padding-top: var(--space-3);
             border-top: 1px solid #e0ede0;
         }
 
         .calendar-legend .legend-item {
             display: flex;
             align-items: center;
-            gap: var(--space-2);
-            font-size: 11px;
+            gap: 4px;
+            font-size: 10px;
             color: var(--color-text-muted);
         }
 
         .calendar-legend .legend-color {
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: var(--radius-sm);
         }
 
@@ -1101,7 +1237,7 @@
         .stats-section {
             background-color: var(--color-card-bg);
             border-radius: var(--radius-xl);
-            padding: var(--space-5);
+            padding: var(--space-4);
             box-shadow: var(--shadow-sm);
         }
 
@@ -1109,7 +1245,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--space-4) 0;
+            padding: var(--space-3) 0;
             border-bottom: 1px solid #e0ede0;
         }
 
@@ -1130,8 +1266,124 @@
 
         .stat-value.highlight {
             font-family: var(--font-serif);
-            font-size: 20px;
+            font-size: 18px;
             color: var(--color-primary);
+        }
+
+        /* 日历选择弹窗 */
+        .calendar-picker-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(45, 90, 45, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .calendar-picker-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .calendar-picker-content {
+            background-color: var(--color-card-bg);
+            border-radius: var(--radius-xl);
+            padding: var(--space-4);
+            box-shadow: var(--shadow-lg);
+            width: 300px;
+            transform: scale(0.9);
+            transition: transform 0.2s ease;
+        }
+
+        .calendar-picker-modal.active .calendar-picker-content {
+            transform: scale(1);
+        }
+
+        .calendar-picker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-3);
+        }
+
+        .calendar-picker-nav {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .calendar-picker-month {
+            font-family: var(--font-serif);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .calendar-picker-close {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-muted);
+            cursor: pointer;
+        }
+
+        .calendar-picker-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .calendar-picker-weekday {
+            text-align: center;
+            font-size: 11px;
+            color: var(--color-text-muted);
+            padding: var(--space-1) 0;
+        }
+
+        .calendar-picker-day {
+            text-align: center;
+            padding: var(--space-2);
+            font-family: var(--font-serif);
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+        }
+
+        .calendar-picker-day:hover {
+            background-color: var(--color-primary-bg);
+        }
+
+        .calendar-picker-day.today {
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .calendar-picker-day.selected {
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .calendar-picker-day.empty {
+            cursor: default;
+        }
+
+        .calendar-picker-day.empty:hover {
+            background: transparent;
         }
     </style>
 </head>
@@ -1148,9 +1400,7 @@
             <section id="schedule-module" class="module active">
                 <!-- 日期选择器 -->
                 <div class="date-picker">
-                    <div class="date-scroll" id="date-scroll">
-                        <!-- 日期项将通过 JavaScript 动态生成 -->
-                    </div>
+                    <div class="date-scroll" id="date-scroll"></div>
                     <button class="calendar-btn" id="calendar-btn">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -1162,9 +1412,7 @@
                 </div>
 
                 <!-- 待办事项列表 -->
-                <div class="todo-list" id="todo-list">
-                    <!-- 待办项将通过 JavaScript 动态生成 -->
-                </div>
+                <div class="todo-list" id="todo-list"></div>
 
                 <!-- 今日完成度 -->
                 <div class="progress-section" id="progress-section">
@@ -1181,7 +1429,9 @@
                 <div class="chart-section" id="chart-section">
                     <div class="chart-title">事件耗时占比</div>
                     <div class="chart-container">
-                        <canvas id="pie-chart" width="120" height="120"></canvas>
+                        <div class="pie-chart-wrapper">
+                            <canvas id="pie-chart" width="140" height="140"></canvas>
+                        </div>
                         <div class="chart-legend" id="chart-legend"></div>
                     </div>
                 </div>
@@ -1206,19 +1456,15 @@
 
                 <!-- 恒例表格 -->
                 <div class="routine-table" id="routine-table">
-                    <div class="table-dates" id="table-dates">
-                        <!-- 日期行将通过 JavaScript 生成 -->
-                    </div>
-                    <div class="table-content" id="table-content">
-                        <!-- 表格内容将通过 JavaScript 生成 -->
-                    </div>
+                    <div class="table-header" id="table-header"></div>
+                    <div class="table-content" id="table-content"></div>
                 </div>
 
                 <!-- 完成率折线图 -->
                 <div class="line-chart-section">
                     <div class="chart-title">本周完成率趋势</div>
                     <div class="line-chart-container">
-                        <canvas id="line-chart" width="300" height="150"></canvas>
+                        <canvas id="line-chart"></canvas>
                     </div>
                 </div>
             </section>
@@ -1251,9 +1497,7 @@
                         <div class="calendar-weekday">六</div>
                         <div class="calendar-weekday">日</div>
                     </div>
-                    <div class="calendar-grid" id="calendar-grid">
-                        <!-- 日期格子将通过 JavaScript 生成 -->
-                    </div>
+                    <div class="calendar-grid" id="calendar-grid"></div>
                     <div class="calendar-legend">
                         <div class="legend-item">
                             <div class="legend-color" style="background-color: white; border: 1px solid #e0ede0;"></div>
@@ -1327,13 +1571,9 @@
                     <div class="form-group">
                         <label class="form-label">时间点 *</label>
                         <div class="time-picker">
-                            <select class="time-select" id="routine-hour">
-                                <!-- 时选项将通过 JavaScript 生成 -->
-                            </select>
+                            <div class="time-display" id="routine-hour-display" onclick="openTimePicker('routine', 'hour')">06</div>
                             <span class="time-separator">:</span>
-                            <select class="time-select" id="routine-minute">
-                                <!-- 分选项将通过 JavaScript 生成 -->
-                            </select>
+                            <div class="time-display" id="routine-minute-display" onclick="openTimePicker('routine', 'minute')">00</div>
                         </div>
                     </div>
                 </div>
@@ -1381,25 +1621,17 @@
                     <div class="form-group">
                         <label class="form-label">截止时间（选填）</label>
                         <div class="time-picker">
-                            <select class="time-select" id="deadline-hour">
-                                <!-- 时选项将通过 JavaScript 生成 -->
-                            </select>
+                            <div class="time-display" id="deadline-hour-display" onclick="openTimePicker('deadline', 'hour')">时</div>
                             <span class="time-separator">:</span>
-                            <select class="time-select" id="deadline-minute">
-                                <!-- 分选项将通过 JavaScript 生成 -->
-                            </select>
+                            <div class="time-display" id="deadline-minute-display" onclick="openTimePicker('deadline', 'minute')">分</div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">提前提醒（选填）</label>
                         <div class="time-picker">
-                            <select class="time-select" id="reminder-hour">
-                                <!-- 时选项将通过 JavaScript 生成 -->
-                            </select>
+                            <div class="time-display" id="reminder-hour-display" onclick="openTimePicker('reminder', 'hour')">时</div>
                             <span class="time-separator">:</span>
-                            <select class="time-select" id="reminder-minute">
-                                <!-- 分选项将通过 JavaScript 生成 -->
-                            </select>
+                            <div class="time-display" id="reminder-minute-display" onclick="openTimePicker('reminder', 'minute')">分</div>
                         </div>
                     </div>
                 </div>
@@ -1415,6 +1647,7 @@
             <div class="modal">
                 <div class="modal-header">
                     <h3>完成事件</h3>
+                    <button class="modal-close">×</button>
                 </div>
                 <div class="modal-body">
                     <div class="complete-event-name" id="complete-event-name"></div>
@@ -1425,7 +1658,8 @@
                             <button class="duration-btn" data-duration="30">30分钟</button>
                             <button class="duration-btn" data-duration="45">45分钟</button>
                             <button class="duration-btn" data-duration="60">60分钟</button>
-                            <button class="duration-btn custom-duration-btn">自定义耗时</button>
+                            <button class="duration-btn custom-duration-btn">自定义</button>
+                            <button class="duration-btn no-duration" data-duration="skip">不填写</button>
                         </div>
                         <div class="custom-duration-input" id="custom-duration-input" style="display: none;">
                             <input type="number" class="form-input" id="custom-duration" placeholder="请输入" min="1">
@@ -1450,6 +1684,43 @@
                 <div class="modal-footer">
                     <button class="btn btn-secondary">取消</button>
                     <button class="btn btn-danger" id="delete-confirm-btn">删除</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 日历选择弹窗 -->
+        <div class="calendar-picker-modal" id="calendar-picker-modal">
+            <div class="calendar-picker-content">
+                <div class="calendar-picker-header">
+                    <div class="calendar-picker-nav">
+                        <button class="week-btn" id="calendar-picker-prev">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                        <span class="calendar-picker-month" id="calendar-picker-month">2024年6月</span>
+                        <button class="week-btn" id="calendar-picker-next">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="calendar-picker-close" onclick="closeCalendarPicker()">×</div>
+                </div>
+                <div class="calendar-picker-grid" id="calendar-picker-grid"></div>
+            </div>
+        </div>
+
+        <!-- 时分选择弹窗 -->
+        <div class="time-picker-modal" id="time-picker-modal">
+            <div class="time-picker-content">
+                <div class="time-picker-header">
+                    <span class="time-picker-title" id="time-picker-title">选择时间</span>
+                    <span class="time-picker-confirm" onclick="confirmTimePicker()">确定</span>
+                </div>
+                <div class="time-scroll-container">
+                    <div class="time-scroll" id="time-scroll-hour"></div>
+                    <div class="time-scroll" id="time-scroll-minute"></div>
                 </div>
             </div>
         </div>
@@ -1492,36 +1763,14 @@
     <script>
         // 标语库
         const slogans = [
-            '一期一会，珍惜当下',
-            '日日是好日',
-            '知行合一',
-            '慢慢来，比较快',
-            '但行好事，莫问前程',
-            '活在当下',
-            '万事皆可期',
-            '心之所向，素履以往',
-            '不忘初心',
-            '且听风吟',
-            '月有阴晴圆缺',
-            '山高水长',
-            '宁静致远',
-            '厚积薄发',
-            '水滴石穿',
-            '千里之行，始于足下',
-            '学无止境',
-            '自强不息',
-            '上善若水',
-            '大道至简',
-            '观自在',
-            '正心诚意',
-            '格物致知',
-            '慎独',
-            '日拱一卒',
-            '功不唐捐',
-            '玉汝于成',
-            '行远自迩',
-            '登高自卑',
-            '慎终如始'
+            '一期一会，珍惜当下', '日日是好日', '知行合一', '慢慢来，比较快',
+            '但行好事，莫问前程', '活在当下', '万事皆可期', '心之所向，素履以往',
+            '不忘初心', '且听风吟', '月有阴晴圆缺', '山高水长',
+            '宁静致远', '厚积薄发', '水滴石穿', '千里之行，始于足下',
+            '学无止境', '自强不息', '上善若水', '大道至简',
+            '观自在', '正心诚意', '格物致知', '慎独',
+            '日拱一卒', '功不唐捐', '玉汝于成', '行远自迩',
+            '登高自卑', '慎终如始'
         ];
 
         let lastSloganIndex = -1;
@@ -1531,9 +1780,153 @@
             do {
                 newIndex = Math.floor(Math.random() * slogans.length);
             } while (newIndex === lastSloganIndex && slogans.length > 1);
-
             lastSloganIndex = newIndex;
             document.getElementById('slogan-text').textContent = slogans[newIndex];
+        }
+
+        // 时分选择器状态
+        let currentTimePickerType = null;
+        let currentTimePickerField = null;
+        let selectedHour = null;
+        let selectedMinute = null;
+
+        function openTimePicker(type, field) {
+            currentTimePickerType = type;
+            currentTimePickerField = field;
+
+            const title = field === 'hour' ? '选择小时' : '选择分钟';
+            document.getElementById('time-picker-title').textContent = title;
+
+            const hourScroll = document.getElementById('time-scroll-hour');
+            const minuteScroll = document.getElementById('time-scroll-minute');
+
+            // 生成小时选项
+            hourScroll.innerHTML = '';
+            for (let i = 0; i < 24; i++) {
+                const item = document.createElement('div');
+                item.className = 'time-scroll-item';
+                item.textContent = String(i).padStart(2, '0');
+                item.onclick = () => selectTimeItem('hour', i, item);
+                hourScroll.appendChild(item);
+            }
+
+            // 生成分钟选项
+            minuteScroll.innerHTML = '';
+            for (let i = 0; i < 60; i++) {
+                const item = document.createElement('div');
+                item.className = 'time-scroll-item';
+                item.textContent = String(i).padStart(2, '0');
+                item.onclick = () => selectTimeItem('minute', i, item);
+                minuteScroll.appendChild(item);
+            }
+
+            // 显示弹窗
+            document.getElementById('time-picker-modal').classList.add('active');
+
+            // 滚动到当前选中值
+            const currentDisplay = document.getElementById(`${type}-${field}-display`);
+            const currentValue = currentDisplay.textContent;
+            if (currentValue !== '时' && currentValue !== '分') {
+                const value = parseInt(currentValue);
+                const targetScroll = field === 'hour' ? hourScroll : minuteScroll;
+                const targetItem = targetScroll.children[value];
+                if (targetItem) {
+                    targetItem.classList.add('selected');
+                    targetItem.scrollIntoView({ block: 'center' });
+                }
+            }
+        }
+
+        function selectTimeItem(field, value, element) {
+            const container = field === 'hour' ? 'time-scroll-hour' : 'time-scroll-minute';
+            document.querySelectorAll(`#${container} .time-scroll-item`).forEach(item => {
+                item.classList.remove('selected');
+            });
+            element.classList.add('selected');
+
+            if (field === 'hour') {
+                selectedHour = value;
+            } else {
+                selectedMinute = value;
+            }
+        }
+
+        function confirmTimePicker() {
+            const type = currentTimePickerType;
+            const field = currentTimePickerField;
+
+            if (field === 'hour' && selectedHour !== null) {
+                document.getElementById(`${type}-hour-display`).textContent = String(selectedHour).padStart(2, '0');
+                // 如果分钟没选，默认为00
+                if (document.getElementById(`${type}-minute-display`).textContent === '分') {
+                    document.getElementById(`${type}-minute-display`).textContent = '00';
+                }
+            } else if (field === 'minute' && selectedMinute !== null) {
+                document.getElementById(`${type}-minute-display`).textContent = String(selectedMinute).padStart(2, '0');
+            }
+
+            document.getElementById('time-picker-modal').classList.remove('active');
+            selectedHour = null;
+            selectedMinute = null;
+        }
+
+        // 日历选择器
+        let calendarPickerDate = new Date();
+
+        function openCalendarPicker() {
+            calendarPickerDate = new Date(datePicker.getSelectedDate());
+            renderCalendarPicker();
+            document.getElementById('calendar-picker-modal').classList.add('active');
+        }
+
+        function closeCalendarPicker() {
+            document.getElementById('calendar-picker-modal').classList.remove('active');
+        }
+
+        function renderCalendarPicker() {
+            const year = calendarPickerDate.getFullYear();
+            const month = calendarPickerDate.getMonth();
+
+            document.getElementById('calendar-picker-month').textContent = `${year}年${month + 1}月`;
+
+            const firstDay = new Date(year, month, 1);
+            let startDay = firstDay.getDay();
+            if (startDay === 0) startDay = 7;
+
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+            const selectedDate = datePicker.getSelectedDate();
+
+            const grid = document.getElementById('calendar-picker-grid');
+            let html = '';
+
+            // 星期头部
+            const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
+            weekdays.forEach(day => {
+                html += `<div class="calendar-picker-weekday">${day}</div>`;
+            });
+
+            // 填充空白
+            for (let i = 1; i < startDay; i++) {
+                html += '<div class="calendar-picker-day empty"></div>';
+            }
+
+            // 填充日期
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const isToday = date.toDateString() === today.toDateString();
+                const isSelected = date.toDateString() === selectedDate.toDateString();
+                const className = `calendar-picker-day ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''}`;
+                html += `<div class="${className}" onclick="selectCalendarDate(${year}, ${month}, ${day})">${day}</div>`;
+            }
+
+            grid.innerHTML = html;
+        }
+
+        function selectCalendarDate(year, month, day) {
+            const date = new Date(year, month, day);
+            datePicker.selectDate(date.toISOString());
+            closeCalendarPicker();
         }
 
         // 日期选择器
@@ -1553,7 +1946,6 @@
                 const today = new Date();
                 const dates = [];
 
-                // 生成过去和未来的日期（无限延伸效果）
                 for (let i = -30; i <= 30; i++) {
                     const date = new Date(today);
                     date.setDate(today.getDate() + i);
@@ -1581,7 +1973,6 @@
                 this.selectedDate = new Date(dateString);
                 this.renderDates();
                 this.scrollToSelected();
-                // 更新待办列表显示
                 if (typeof todoList !== 'undefined') {
                     todoList.render();
                 }
@@ -1642,7 +2033,6 @@
             init() {
                 this.render();
                 this.bindEvents();
-                this.initTimeSelectors();
             }
 
             loadTodos() {
@@ -1672,12 +2062,13 @@
                     id: Date.now().toString(),
                     date: this.formatDate(selectedDate),
                     title: title,
-                    deadlineHour: deadlineHour || null,
-                    deadlineMinute: deadlineMinute || null,
-                    reminderHour: reminderHour || null,
-                    reminderMinute: reminderMinute || null,
+                    deadlineHour: deadlineHour,
+                    deadlineMinute: deadlineMinute,
+                    reminderHour: reminderHour,
+                    reminderMinute: reminderMinute,
                     completed: false,
                     duration: null,
+                    skipDuration: false,
                     createdAt: new Date().toISOString()
                 };
 
@@ -1690,10 +2081,10 @@
                 const todo = this.todos.find(t => t.id === id);
                 if (todo) {
                     todo.title = title;
-                    todo.deadlineHour = deadlineHour || null;
-                    todo.deadlineMinute = deadlineMinute || null;
-                    todo.reminderHour = reminderHour || null;
-                    todo.reminderMinute = reminderMinute || null;
+                    todo.deadlineHour = deadlineHour;
+                    todo.deadlineMinute = deadlineMinute;
+                    todo.reminderHour = reminderHour;
+                    todo.reminderMinute = reminderMinute;
                     this.saveTodos();
                     this.render();
                 }
@@ -1705,11 +2096,23 @@
                 this.render();
             }
 
-            completeTodo(id, duration) {
+            completeTodo(id, duration, skipDuration) {
                 const todo = this.todos.find(t => t.id === id);
                 if (todo) {
                     todo.completed = true;
-                    todo.duration = duration || null;
+                    todo.duration = duration;
+                    todo.skipDuration = skipDuration;
+                    this.saveTodos();
+                    this.render();
+                }
+            }
+
+            uncompleteTodo(id) {
+                const todo = this.todos.find(t => t.id === id);
+                if (todo) {
+                    todo.completed = false;
+                    todo.duration = null;
+                    todo.skipDuration = false;
                     this.saveTodos();
                     this.render();
                 }
@@ -1720,52 +2123,85 @@
                 const todos = this.getTodosForDate(selectedDate);
                 const todoList = document.getElementById('todo-list');
 
-                // 按完成状态排序：未完成在前，已完成在后
+                // 排序：未完成在前（按截止时间从近到远），已完成在后（按截止时间从近到远）
                 const sortedTodos = [...todos].sort((a, b) => {
-                    if (a.completed === b.completed) return 0;
-                    return a.completed ? 1 : -1;
+                    // 先按完成状态分组
+                    if (a.completed !== b.completed) {
+                        return a.completed ? 1 : -1;
+                    }
+
+                    // 同组内按截止时间排序
+                    const aHasDeadline = a.deadlineHour !== null;
+                    const bHasDeadline = b.deadlineHour !== null;
+
+                    if (aHasDeadline && bHasDeadline) {
+                        const aTime = a.deadlineHour * 60 + a.deadlineMinute;
+                        const bTime = b.deadlineHour * 60 + b.deadlineMinute;
+                        return aTime - bTime;
+                    }
+
+                    if (aHasDeadline) return -1;
+                    if (bHasDeadline) return 1;
+
+                    // 都没有截止时间，按创建时间排序
+                    return new Date(a.createdAt) - new Date(b.createdAt);
                 });
 
-                todoList.innerHTML = sortedTodos.map(todo => `
-                    <div class="todo-item ${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
-                        <div class="todo-checkbox ${todo.completed ? 'checked' : ''}"
-                             onclick="todoList.toggleComplete('${todo.id}')"></div>
-                        <div class="todo-content">
-                            <div class="todo-title">${todo.title}</div>
-                            <div class="todo-meta">
-                                ${todo.completed && todo.duration ? `耗时 ${todo.duration}min` :
-                                  todo.deadlineHour !== null ? `截止 ${String(todo.deadlineHour).padStart(2, '0')}:${String(todo.deadlineMinute).padStart(2, '0')}` : ''}
-                            </div>
-                        </div>
-                        <div class="todo-actions">
-                            <div class="todo-action edit" onclick="todoList.openEditModal('${todo.id}')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                </svg>
-                            </div>
-                            <div class="todo-action delete" onclick="todoList.openDeleteModal('${todo.id}')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
+                todoList.innerHTML = sortedTodos.map(todo => {
+                    const hasDeadline = todo.deadlineHour !== null;
+                    const deadlineStr = hasDeadline ? `截止 ${String(todo.deadlineHour).padStart(2, '0')}:${String(todo.deadlineMinute).padStart(2, '0')}` : '';
+                    const hasDuration = todo.completed && todo.duration !== null && !todo.skipDuration;
+                    const durationStr = hasDuration ? `耗时 ${todo.duration}min` : '';
 
-                // 更新完成度
+                    return `
+                        <div class="todo-item ${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
+                            <div class="todo-checkbox ${todo.completed ? 'checked' : ''}"
+                                 onclick="todoList.toggleComplete('${todo.id}')"></div>
+                            <div class="todo-content">
+                                <div class="todo-title">${todo.title}</div>
+                                <div class="todo-meta">
+                                    ${hasDeadline ? `<span class="deadline">${deadlineStr}</span>` : ''}
+                                    ${hasDeadline && hasDuration ? '<span class="separator">·</span>' : ''}
+                                    ${hasDuration ? `<span class="duration">${durationStr}</span>` : ''}
+                                </div>
+                            </div>
+                            <div class="todo-actions">
+                                <div class="todo-action edit" onclick="todoList.openEditModal('${todo.id}')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                </div>
+                                <div class="todo-action delete" onclick="todoList.openDeleteModal('${todo.id}')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
                 this.updateProgress(todos);
-                // 更新饼状图
                 this.updatePieChart(todos);
             }
 
             toggleComplete(id) {
                 const todo = this.todos.find(t => t.id === id);
-                if (todo && !todo.completed) {
-                    this.currentCompleteId = id;
-                    document.getElementById('complete-event-name').textContent = todo.title;
-                    completeModal.open();
+                if (todo) {
+                    if (!todo.completed) {
+                        this.currentCompleteId = id;
+                        document.getElementById('complete-event-name').textContent = todo.title;
+                        // 重置选择状态
+                        document.querySelectorAll('.duration-btn').forEach(b => b.classList.remove('selected'));
+                        document.getElementById('custom-duration-input').style.display = 'none';
+                        document.getElementById('custom-duration').value = '';
+                        completeModal.open();
+                    } else {
+                        // 取消完成
+                        this.uncompleteTodo(id);
+                    }
                 }
             }
 
@@ -1777,14 +2213,11 @@
                     document.getElementById('todo-input').value = todo.title;
                     document.getElementById('todo-submit-btn').textContent = '保存';
 
-                    if (todo.deadlineHour !== null) {
-                        document.getElementById('deadline-hour').value = todo.deadlineHour;
-                        document.getElementById('deadline-minute').value = todo.deadlineMinute;
-                    }
-                    if (todo.reminderHour !== null) {
-                        document.getElementById('reminder-hour').value = todo.reminderHour;
-                        document.getElementById('reminder-minute').value = todo.reminderMinute;
-                    }
+                    // 设置时间显示
+                    document.getElementById('deadline-hour-display').textContent = todo.deadlineHour !== null ? String(todo.deadlineHour).padStart(2, '0') : '时';
+                    document.getElementById('deadline-minute-display').textContent = todo.deadlineMinute !== null ? String(todo.deadlineMinute).padStart(2, '0') : '分';
+                    document.getElementById('reminder-hour-display').textContent = todo.reminderHour !== null ? String(todo.reminderHour).padStart(2, '0') : '时';
+                    document.getElementById('reminder-minute-display').textContent = todo.reminderMinute !== null ? String(todo.reminderMinute).padStart(2, '0') : '分';
 
                     todoModal.open();
                 }
@@ -1809,8 +2242,8 @@
                 const ctx = canvas.getContext('2d');
                 const legend = document.getElementById('chart-legend');
 
-                // 只统计已完成且有耗时的事件
-                const completedWithDuration = todos.filter(t => t.completed && t.duration);
+                // 只统计已完成且有耗时且未跳过耗时的事件
+                const completedWithDuration = todos.filter(t => t.completed && t.duration !== null && !t.skipDuration);
 
                 if (completedWithDuration.length === 0) {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1818,31 +2251,56 @@
                     return;
                 }
 
-                // 计算总耗时
                 const totalDuration = completedWithDuration.reduce((sum, t) => sum + t.duration, 0);
 
-                // 颜色方案
                 const colors = [
                     '#4a7c59', '#7ab68a', '#a8d5b8', '#2d5a2d',
                     '#6b9b7a', '#8fc49e', '#b5dcc0', '#3d6b4a'
                 ];
 
-                // 绘制饼状图
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                let startAngle = -Math.PI / 2;
+                // 动画绘制饼状图
+                let progress = 0;
+                const animationDuration = 1000;
+                const startTime = performance.now();
 
-                completedWithDuration.forEach((todo, index) => {
-                    const sliceAngle = (todo.duration / totalDuration) * 2 * Math.PI;
-                    const color = colors[index % colors.length];
+                function animate(currentTime) {
+                    progress = Math.min((currentTime - startTime) / animationDuration, 1);
 
-                    ctx.beginPath();
-                    ctx.moveTo(60, 60);
-                    ctx.arc(60, 60, 55, startAngle, startAngle + sliceAngle);
-                    ctx.fillStyle = color;
-                    ctx.fill();
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                    startAngle += sliceAngle;
-                });
+                    const centerX = canvas.width / 2;
+                    const centerY = canvas.height / 2;
+                    const radius = 60;
+                    const innerRadius = 35;
+
+                    let startAngle = -Math.PI / 2;
+                    const totalAngle = progress * 2 * Math.PI;
+
+                    completedWithDuration.forEach((todo, index) => {
+                        const sliceAngle = (todo.duration / totalDuration) * totalAngle;
+                        const color = colors[index % colors.length];
+
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
+                        ctx.arc(centerX, centerY, innerRadius, startAngle + sliceAngle, startAngle, true);
+                        ctx.closePath();
+                        ctx.fillStyle = color;
+                        ctx.fill();
+
+                        // 添加分隔线
+                        ctx.strokeStyle = 'white';
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+
+                        startAngle += sliceAngle;
+                    });
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    }
+                }
+
+                requestAnimationFrame(animate);
 
                 // 更新图例
                 legend.innerHTML = completedWithDuration.map((todo, index) => {
@@ -1857,42 +2315,19 @@
                 }).join('');
             }
 
-            initTimeSelectors() {
-                const hourSelects = ['deadline-hour', 'reminder-hour'];
-                const minuteSelects = ['deadline-minute', 'reminder-minute'];
-
-                hourSelects.forEach(id => {
-                    const select = document.getElementById(id);
-                    select.innerHTML = '<option value="">时</option>';
-                    for (let i = 0; i < 24; i++) {
-                        select.innerHTML += `<option value="${i}">${String(i).padStart(2, '0')}</option>`;
-                    }
-                });
-
-                minuteSelects.forEach(id => {
-                    const select = document.getElementById(id);
-                    select.innerHTML = '<option value="">分</option>';
-                    for (let i = 0; i < 60; i++) {
-                        select.innerHTML += `<option value="${i}">${String(i).padStart(2, '0')}</option>`;
-                    }
-                });
-            }
-
             bindEvents() {
-                // 添加待办按钮
                 document.getElementById('add-todo-btn').addEventListener('click', () => {
                     this.currentEditId = null;
                     document.getElementById('modal-title').textContent = '添加待办';
                     document.getElementById('todo-submit-btn').textContent = '添加';
                     document.getElementById('todo-input').value = '';
-                    document.getElementById('deadline-hour').value = '';
-                    document.getElementById('deadline-minute').value = '';
-                    document.getElementById('reminder-hour').value = '';
-                    document.getElementById('reminder-minute').value = '';
+                    document.getElementById('deadline-hour-display').textContent = '时';
+                    document.getElementById('deadline-minute-display').textContent = '分';
+                    document.getElementById('reminder-hour-display').textContent = '时';
+                    document.getElementById('reminder-minute-display').textContent = '分';
                     todoModal.open();
                 });
 
-                // 提交待办
                 document.getElementById('todo-submit-btn').addEventListener('click', () => {
                     const title = document.getElementById('todo-input').value.trim();
                     if (!title) {
@@ -1900,28 +2335,28 @@
                         return;
                     }
 
-                    const deadlineHour = document.getElementById('deadline-hour').value;
-                    const deadlineMinute = document.getElementById('deadline-minute').value;
-                    const reminderHour = document.getElementById('reminder-hour').value;
-                    const reminderMinute = document.getElementById('reminder-minute').value;
+                    const deadlineHourText = document.getElementById('deadline-hour-display').textContent;
+                    const deadlineMinuteText = document.getElementById('deadline-minute-display').textContent;
+                    const reminderHourText = document.getElementById('reminder-hour-display').textContent;
+                    const reminderMinuteText = document.getElementById('reminder-minute-display').textContent;
+
+                    const deadlineHour = deadlineHourText !== '时' ? parseInt(deadlineHourText) : null;
+                    let deadlineMinute = deadlineMinuteText !== '分' ? parseInt(deadlineMinuteText) : null;
+                    const reminderHour = reminderHourText !== '时' ? parseInt(reminderHourText) : null;
+                    let reminderMinute = reminderMinuteText !== '分' ? parseInt(reminderMinuteText) : null;
+
+                    // 如果填了小时但没填分钟，默认为00
+                    if (deadlineHour !== null && deadlineMinute === null) {
+                        deadlineMinute = 0;
+                    }
+                    if (reminderHour !== null && reminderMinute === null) {
+                        reminderMinute = 0;
+                    }
 
                     if (this.currentEditId) {
-                        this.editTodo(
-                            this.currentEditId,
-                            title,
-                            deadlineHour !== '' ? parseInt(deadlineHour) : null,
-                            deadlineMinute !== '' ? parseInt(deadlineMinute) : null,
-                            reminderHour !== '' ? parseInt(reminderHour) : null,
-                            reminderMinute !== '' ? parseInt(reminderMinute) : null
-                        );
+                        this.editTodo(this.currentEditId, title, deadlineHour, deadlineMinute, reminderHour, reminderMinute);
                     } else {
-                        this.addTodo(
-                            title,
-                            deadlineHour !== '' ? parseInt(deadlineHour) : null,
-                            deadlineMinute !== '' ? parseInt(deadlineMinute) : null,
-                            reminderHour !== '' ? parseInt(reminderHour) : null,
-                            reminderMinute !== '' ? parseInt(reminderMinute) : null
-                        );
+                        this.addTodo(title, deadlineHour, deadlineMinute, reminderHour, reminderMinute);
                     }
 
                     todoModal.close();
@@ -1945,9 +2380,12 @@
                 document.getElementById('complete-confirm-btn').addEventListener('click', () => {
                     const selectedBtn = document.querySelector('.duration-btn.selected');
                     let duration = null;
+                    let skipDuration = false;
 
                     if (selectedBtn) {
-                        if (selectedBtn.classList.contains('custom-duration-btn')) {
+                        if (selectedBtn.dataset.duration === 'skip') {
+                            skipDuration = true;
+                        } else if (selectedBtn.classList.contains('custom-duration-btn')) {
                             const customInput = document.getElementById('custom-duration');
                             duration = customInput.value ? parseInt(customInput.value) : null;
                         } else {
@@ -1956,13 +2394,8 @@
                     }
 
                     if (this.currentCompleteId) {
-                        this.completeTodo(this.currentCompleteId, duration);
+                        this.completeTodo(this.currentCompleteId, duration, skipDuration);
                     }
-
-                    // 重置选择状态
-                    document.querySelectorAll('.duration-btn').forEach(b => b.classList.remove('selected'));
-                    document.getElementById('custom-duration-input').style.display = 'none';
-                    document.getElementById('custom-duration').value = '';
 
                     completeModal.close();
                 });
@@ -1991,7 +2424,6 @@
                 this.renderTable();
                 this.renderLineChart();
                 this.bindEvents();
-                this.initTimeSelectors();
             }
 
             loadRoutines() {
@@ -2052,6 +2484,12 @@
                 };
 
                 this.routines.push(newRoutine);
+                // 按时间排序
+                this.routines.sort((a, b) => {
+                    const aTime = a.hour * 60 + a.minute;
+                    const bTime = b.hour * 60 + b.minute;
+                    return aTime - bTime;
+                });
                 this.saveRoutines();
                 this.renderTable();
                 this.renderLineChart();
@@ -2087,29 +2525,35 @@
                 const endMonth = String(weekEnd.getMonth() + 1).padStart(2, '0');
                 const endDay = String(weekEnd.getDate()).padStart(2, '0');
 
-                document.getElementById('week-range').textContent =
-                    `${startMonth}.${startDay} ~ ${endMonth}.${endDay}`;
+                document.getElementById('week-range').textContent = `${startMonth}.${startDay} ~ ${endMonth}.${endDay}`;
             }
 
             renderTable() {
                 const dates = this.getWeekDates(this.currentWeekStart);
                 const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
 
-                // 渲染日期行
-                const tableDates = document.getElementById('table-dates');
-                tableDates.innerHTML = `
-                    <div class="table-date"></div>
+                // 渲染表头
+                const tableHeader = document.getElementById('table-header');
+                tableHeader.innerHTML = `
+                    <div class="table-header-cell"></div>
                     ${dates.map((date, index) => `
-                        <div class="table-date ${this.isToday(date) ? 'today' : ''}">
+                        <div class="table-header-cell ${this.isToday(date) ? 'today' : ''}">
                             <div class="weekday">${weekdays[index]}</div>
                             <div class="day">${String(date.getDate()).padStart(2, '0')}</div>
                         </div>
                     `).join('')}
                 `;
 
+                // 按时间排序恒例
+                const sortedRoutines = [...this.routines].sort((a, b) => {
+                    const aTime = a.hour * 60 + a.minute;
+                    const bTime = b.hour * 60 + b.minute;
+                    return aTime - bTime;
+                });
+
                 // 渲染表格内容
                 const tableContent = document.getElementById('table-content');
-                tableContent.innerHTML = this.routines.map(routine => {
+                tableContent.innerHTML = sortedRoutines.map(routine => {
                     const timeStr = `${String(routine.hour).padStart(2, '0')}:${String(routine.minute).padStart(2, '0')}`;
 
                     return `
@@ -2150,64 +2594,99 @@
                 const dates = this.getWeekDates(this.currentWeekStart);
                 const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
 
-                // 计算每天的完成率
+                // 设置canvas尺寸
+                canvas.width = canvas.parentElement.offsetWidth;
+                canvas.height = 180;
+
                 const completionRates = dates.map(date => {
                     const dateString = this.formatDate(date);
                     const total = this.routines.length;
                     if (total === 0) return 0;
-
                     const completed = this.routines.filter(r => r.completions[dateString]).length;
                     return Math.round((completed / total) * 100);
                 });
 
-                // 清空画布
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                // 绘制网格线
+                const padding = { top: 20, right: 30, bottom: 35, left: 45 };
+                const chartWidth = canvas.width - padding.left - padding.right;
+                const chartHeight = canvas.height - padding.top - padding.bottom;
+
+                // 绘制背景网格
                 ctx.strokeStyle = '#e0ede0';
                 ctx.lineWidth = 1;
 
-                // Y轴标签
                 const yLabels = ['100%', '80%', '60%', '40%', '20%', '0%'];
-                const yPositions = [20, 40, 60, 80, 100, 120];
-
-                ctx.font = '10px "Noto Sans SC"';
-                ctx.fillStyle = '#7ab68a';
-                ctx.textAlign = 'right';
-
                 yLabels.forEach((label, index) => {
-                    const y = yPositions[index];
-                    ctx.fillText(label, 35, y + 4);
+                    const y = padding.top + (chartHeight / 5) * index;
 
                     ctx.beginPath();
-                    ctx.moveTo(40, y);
-                    ctx.lineTo(280, y);
+                    ctx.moveTo(padding.left, y);
+                    ctx.lineTo(canvas.width - padding.right, y);
                     ctx.stroke();
+
+                    ctx.font = '11px "Noto Sans SC"';
+                    ctx.fillStyle = '#7ab68a';
+                    ctx.textAlign = 'right';
+                    ctx.fillText(label, padding.left - 8, y + 4);
                 });
 
                 // X轴标签
                 ctx.textAlign = 'center';
+                ctx.font = '12px "Noto Sans SC"';
                 weekdays.forEach((day, index) => {
-                    const x = 60 + index * 40;
-                    ctx.fillText(day, x, 140);
+                    const x = padding.left + (chartWidth / 6) * index;
+                    ctx.fillStyle = '#4a7c59';
+                    ctx.fillText(day, x, canvas.height - 10);
                 });
 
-                // 绘制折线
                 if (this.routines.length > 0) {
+                    // 绘制渐变填充
+                    const gradient = ctx.createLinearGradient(0, padding.top, 0, padding.top + chartHeight);
+                    gradient.addColorStop(0, 'rgba(74, 124, 89, 0.3)');
+                    gradient.addColorStop(1, 'rgba(74, 124, 89, 0.02)');
+
+                    ctx.beginPath();
+                    ctx.moveTo(padding.left, padding.top + chartHeight);
+
+                    completionRates.forEach((rate, index) => {
+                        const x = padding.left + (chartWidth / 6) * index;
+                        const y = padding.top + chartHeight - (rate / 100) * chartHeight;
+
+                        if (index === 0) {
+                            ctx.lineTo(x, y);
+                        } else {
+                            // 使用贝塞尔曲线平滑连接
+                            const prevX = padding.left + (chartWidth / 6) * (index - 1);
+                            const prevY = padding.top + chartHeight - (completionRates[index - 1] / 100) * chartHeight;
+                            const cpX = (prevX + x) / 2;
+                            ctx.bezierCurveTo(cpX, prevY, cpX, y, x, y);
+                        }
+                    });
+
+                    ctx.lineTo(canvas.width - padding.right, padding.top + chartHeight);
+                    ctx.closePath();
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+
+                    // 绘制折线
                     ctx.beginPath();
                     ctx.strokeStyle = '#4a7c59';
-                    ctx.lineWidth = 2.5;
+                    ctx.lineWidth = 3;
                     ctx.lineJoin = 'round';
                     ctx.lineCap = 'round';
 
                     completionRates.forEach((rate, index) => {
-                        const x = 60 + index * 40;
-                        const y = 120 - (rate / 100) * 100;
+                        const x = padding.left + (chartWidth / 6) * index;
+                        const y = padding.top + chartHeight - (rate / 100) * chartHeight;
 
                         if (index === 0) {
                             ctx.moveTo(x, y);
                         } else {
-                            ctx.lineTo(x, y);
+                            const prevX = padding.left + (chartWidth / 6) * (index - 1);
+                            const prevY = padding.top + chartHeight - (completionRates[index - 1] / 100) * chartHeight;
+                            const cpX = (prevX + x) / 2;
+                            ctx.bezierCurveTo(cpX, prevY, cpX, y, x, y);
                         }
                     });
 
@@ -2215,13 +2694,23 @@
 
                     // 绘制数据点
                     completionRates.forEach((rate, index) => {
-                        const x = 60 + index * 40;
-                        const y = 120 - (rate / 100) * 100;
+                        const x = padding.left + (chartWidth / 6) * index;
+                        const y = padding.top + chartHeight - (rate / 100) * chartHeight;
 
+                        // 外圈光晕
+                        ctx.beginPath();
+                        ctx.arc(x, y, 8, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(74, 124, 89, 0.15)';
+                        ctx.fill();
+
+                        // 内圈
                         ctx.beginPath();
                         ctx.arc(x, y, 4, 0, Math.PI * 2);
                         ctx.fillStyle = '#4a7c59';
                         ctx.fill();
+                        ctx.strokeStyle = 'white';
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
                     });
                 }
             }
@@ -2231,23 +2720,7 @@
                 routineDeleteModal.open();
             }
 
-            initTimeSelectors() {
-                const hourSelect = document.getElementById('routine-hour');
-                const minuteSelect = document.getElementById('routine-minute');
-
-                hourSelect.innerHTML = '';
-                for (let i = 0; i < 24; i++) {
-                    hourSelect.innerHTML += `<option value="${i}">${String(i).padStart(2, '0')}</option>`;
-                }
-
-                minuteSelect.innerHTML = '';
-                for (let i = 0; i < 60; i++) {
-                    minuteSelect.innerHTML += `<option value="${i}">${String(i).padStart(2, '0')}</option>`;
-                }
-            }
-
             bindEvents() {
-                // 上一周
                 document.getElementById('prev-week').addEventListener('click', () => {
                     this.currentWeekStart.setDate(this.currentWeekStart.getDate() - 7);
                     this.renderWeekSelector();
@@ -2255,7 +2728,6 @@
                     this.renderLineChart();
                 });
 
-                // 下一周
                 document.getElementById('next-week').addEventListener('click', () => {
                     this.currentWeekStart.setDate(this.currentWeekStart.getDate() + 7);
                     this.renderWeekSelector();
@@ -2263,15 +2735,13 @@
                     this.renderLineChart();
                 });
 
-                // 添加恒例按钮
                 document.getElementById('add-routine-btn').addEventListener('click', () => {
                     document.getElementById('routine-input').value = '';
-                    document.getElementById('routine-hour').value = '6';
-                    document.getElementById('routine-minute').value = '0';
+                    document.getElementById('routine-hour-display').textContent = '06';
+                    document.getElementById('routine-minute-display').textContent = '00';
                     routineModal.open();
                 });
 
-                // 提交恒例
                 document.getElementById('routine-submit-btn').addEventListener('click', () => {
                     const name = document.getElementById('routine-input').value.trim();
                     if (!name) {
@@ -2284,14 +2754,13 @@
                         return;
                     }
 
-                    const hour = parseInt(document.getElementById('routine-hour').value);
-                    const minute = parseInt(document.getElementById('routine-minute').value);
+                    const hour = parseInt(document.getElementById('routine-hour-display').textContent);
+                    const minute = parseInt(document.getElementById('routine-minute-display').textContent);
 
                     this.addRoutine(name, hour, minute);
                     routineModal.close();
                 });
 
-                // 删除确认
                 document.getElementById('routine-delete-confirm-btn').addEventListener('click', () => {
                     if (this.currentDeleteId) {
                         this.deleteRoutine(this.currentDeleteId);
@@ -2325,24 +2794,19 @@
                 const year = this.currentDate.getFullYear();
                 const month = this.currentDate.getMonth();
 
-                // 获取本月第一天是星期几（0=周日，调整为周一开始）
                 const firstDay = new Date(year, month, 1);
                 let startDay = firstDay.getDay();
-                if (startDay === 0) startDay = 7; // 周日调整为7
+                if (startDay === 0) startDay = 7;
 
-                // 获取本月天数
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-                // 生成日历格子
                 const calendarGrid = document.getElementById('calendar-grid');
                 let html = '';
 
-                // 填充空白格子（月初）
                 for (let i = 1; i < startDay; i++) {
                     html += '<div class="calendar-day empty"></div>';
                 }
 
-                // 填充日期格子
                 const today = new Date();
                 for (let day = 1; day <= daysInMonth; day++) {
                     const date = new Date(year, month, day);
@@ -2365,16 +2829,13 @@
             getCompletionLevel(date) {
                 const dateString = this.formatDate(date);
 
-                // 获取日程完成情况
                 const todos = JSON.parse(localStorage.getItem('reflecto_todos') || '[]');
                 const dayTodos = todos.filter(t => t.date === dateString);
                 const completedTodos = dayTodos.filter(t => t.completed).length;
 
-                // 获取恒例完成情况
                 const routines = JSON.parse(localStorage.getItem('reflecto_routines') || '[]');
                 const completedRoutines = routines.filter(r => r.completions[dateString]).length;
 
-                // 计算总完成度
                 const totalTasks = dayTodos.length + routines.length;
                 const totalCompleted = completedTodos + completedRoutines;
 
@@ -2394,7 +2855,6 @@
                 const month = this.currentDate.getMonth();
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-                // 获取日程数据
                 const todos = JSON.parse(localStorage.getItem('reflecto_todos') || '[]');
                 const monthTodos = todos.filter(t => {
                     const todoDate = new Date(t.date);
@@ -2402,10 +2862,8 @@
                 });
                 const completedTodos = monthTodos.filter(t => t.completed);
 
-                // 获取恒例数据
                 const routines = JSON.parse(localStorage.getItem('reflecto_routines') || '[]');
 
-                // 计算每日平均完成恒例
                 let totalRoutinesCompleted = 0;
                 for (let day = 1; day <= daysInMonth; day++) {
                     const date = new Date(year, month, day);
@@ -2414,12 +2872,10 @@
                 }
                 const avgRoutines = daysInMonth > 0 ? (totalRoutinesCompleted / daysInMonth).toFixed(1) : 0;
 
-                // 计算月完成度
                 const totalTasks = monthTodos.length + (routines.length * daysInMonth);
                 const totalCompleted = completedTodos.length + totalRoutinesCompleted;
                 const monthlyCompletion = totalTasks > 0 ? Math.round((totalCompleted / totalTasks) * 100) : 0;
 
-                // 更新统计显示
                 document.getElementById('stat-todos-added').textContent = `${monthTodos.length} 条`;
                 document.getElementById('stat-todos-completed').textContent = `${completedTodos.length} 条`;
                 document.getElementById('stat-routines-total').textContent = `${routines.length} 条`;
@@ -2441,7 +2897,6 @@
             }
 
             bindEvents() {
-                // 上一月
                 document.getElementById('prev-month').addEventListener('click', () => {
                     this.currentDate.setMonth(this.currentDate.getMonth() - 1);
                     this.renderMonthTitle();
@@ -2449,7 +2904,6 @@
                     this.renderStats();
                 });
 
-                // 下一月
                 document.getElementById('next-month').addEventListener('click', () => {
                     this.currentDate.setMonth(this.currentDate.getMonth() + 1);
                     this.renderMonthTitle();
@@ -2501,7 +2955,21 @@
                 });
             });
 
-            // 模块切换逻辑，控制 FAB 按钮显示
+            // 日历按钮事件
+            document.getElementById('calendar-btn').addEventListener('click', openCalendarPicker);
+
+            // 日历选择器导航
+            document.getElementById('calendar-picker-prev').addEventListener('click', () => {
+                calendarPickerDate.setMonth(calendarPickerDate.getMonth() - 1);
+                renderCalendarPicker();
+            });
+
+            document.getElementById('calendar-picker-next').addEventListener('click', () => {
+                calendarPickerDate.setMonth(calendarPickerDate.getMonth() + 1);
+                renderCalendarPicker();
+            });
+
+            // 模块切换逻辑
             const navItems = document.querySelectorAll('.nav-item');
             const modules = document.querySelectorAll('.module');
             const addTodoBtn = document.getElementById('add-todo-btn');
@@ -2511,18 +2979,14 @@
                 item.addEventListener('click', function() {
                     const targetModule = this.dataset.module;
 
-                    // 更新导航栏状态
                     navItems.forEach(nav => nav.classList.remove('active'));
                     this.classList.add('active');
 
-                    // 切换模块显示
                     modules.forEach(module => module.classList.remove('active'));
                     document.getElementById(`${targetModule}-module`).classList.add('active');
 
-                    // 更新标语
                     updateSlogan();
 
-                    // 控制 FAB 按钮显示
                     if (targetModule === 'schedule') {
                         addTodoBtn.style.display = 'flex';
                         addRoutineBtn.style.display = 'none';
@@ -2534,7 +2998,6 @@
                         addRoutineBtn.style.display = 'none';
                     }
 
-                    // 刷新目标模块数据
                     if (targetModule === 'schedule' && typeof todoList !== 'undefined') {
                         todoList.render();
                     } else if (targetModule === 'routine' && typeof routineList !== 'undefined') {
