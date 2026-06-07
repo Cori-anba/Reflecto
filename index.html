@@ -533,27 +533,27 @@
             position: fixed;
             bottom: 90px;
             right: 20px;
-            width: 52px;
-            height: 52px;
-            border-radius: var(--radius-xl);
-            background-color: var(--color-primary);
-            color: white;
+            padding: 12px 20px;
+            border-radius: 24px;
+            background-color: white;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
             box-shadow: var(--shadow-lg);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 50;
             transition: all 0.2s ease;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
 
         .fab:hover {
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(74, 124, 89, 0.35);
-        }
-
-        .fab svg {
-            width: 22px;
-            height: 22px;
+            box-shadow: 0 6px 20px rgba(74, 124, 89, 0.25);
+            background-color: var(--color-primary-bg);
         }
 
         /* 模态框 */
@@ -1569,10 +1569,7 @@
 
         <!-- 添加恒例悬浮按钮 -->
         <button class="fab" id="add-routine-btn" style="display: none;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
+            添加恒例
         </button>
 
         <!-- 添加恒例模态框 -->
@@ -1619,10 +1616,7 @@
 
         <!-- 添加待办悬浮按钮 -->
         <button class="fab" id="add-todo-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
+            添加待办
         </button>
 
         <!-- 添加/编辑待办模态框 -->
