@@ -2496,9 +2496,8 @@
 
             getWeekStart(date) {
                 const d = new Date(date);
-                const day = d.getDay(); // 0=周日, 1=周一, ..., 6=周六
-                // 以周日为一周的开始
-                const diff = d.getDate() - day;
+                const day = d.getDay();
+                const diff = d.getDate() - day + (day === 0 ? -6 : 1);
                 d.setDate(diff);
                 d.setHours(0, 0, 0, 0);
                 return d;
@@ -2612,16 +2611,23 @@
                     `).join('')}
                 `;
 
-                // 获取本周最后一天的结束时间
+                // 获取本周最后一天
                 const weekEnd = new Date(dates[6]);
                 weekEnd.setHours(23, 59, 59, 999);
 
-                // 只显示在本周最后一天之前（含当天）创建的恒例
+                // 筛选对本周有效的恒例
+                // 规则：恒例从创建日所在月份的1号开始生效
+                // 如果恒例创建月份 <= 本周最后一天所在月份，则对本周有效
                 const validRoutines = this.routines.filter(r => {
                     const createdDate = new Date(parseInt(r.id));
-                    createdDate.setHours(0, 0, 0, 0);
-                    // 恒例在本周最后一天之前创建，对本周有效
-                    return createdDate <= weekEnd;
+                    const createdMonth = createdDate.getMonth();
+                    const createdYear = createdDate.getFullYear();
+                    const weekEndMonth = weekEnd.getMonth();
+                    const weekEndYear = weekEnd.getFullYear();
+
+                    if (createdYear < weekEndYear) return true;
+                    if (createdYear === weekEndYear && createdMonth <= weekEndMonth) return true;
+                    return false;
                 });
 
                 // 按时间排序恒例
@@ -2635,6 +2641,9 @@
                 const tableContent = document.getElementById('table-content');
                 tableContent.innerHTML = sortedRoutines.map(routine => {
                     const timeStr = `${String(routine.hour).padStart(2, '0')}:${String(routine.minute).padStart(2, '0')}`;
+                    const routineCreatedDate = new Date(parseInt(routine.id));
+                    const routineCreatedMonth = routineCreatedDate.getMonth();
+                    const routineCreatedYear = routineCreatedDate.getFullYear();
 
                     return `
                         <div class="table-row" data-id="${routine.id}">
@@ -2654,21 +2663,20 @@
                                 const dateString = this.formatDate(date);
                                 const isCompleted = routine.completions[dateString] || false;
                                 const isFuture = date > today;
+                                const dateMonth = date.getMonth();
+                                const dateYear = date.getFullYear();
 
                                 // 判断是否可以打勾：
                                 // 1. 不能是未来日期
-                                // 2. 如果是过去的月份，不能打勾
-                                // 3. 如果是当前月份，只能打勾1号到当天
+                                // 2. 日期必须在恒例创建月份或之后
+                                // 3. 日期必须在当前月份或之后（不能打勾已过去的月份）
                                 let canCheck = false;
                                 if (!isFuture) {
-                                    if (weekYear < today.getFullYear() ||
-                                        (weekYear === today.getFullYear() && weekMonth < today.getMonth())) {
-                                        // 过去的月份，不能打勾
-                                        canCheck = false;
-                                    } else {
-                                        // 当前或未来月份，且不是未来日期，可以打勾
-                                        canCheck = true;
-                                    }
+                                    const isAfterRoutineCreation = dateYear > routineCreatedYear ||
+                                        (dateYear === routineCreatedYear && dateMonth >= routineCreatedMonth);
+                                    const isCurrentOrFutureMonth = dateYear > today.getFullYear() ||
+                                        (dateYear === today.getFullYear() && dateMonth >= today.getMonth());
+                                    canCheck = isAfterRoutineCreation && isCurrentOrFutureMonth;
                                 }
 
                                 const isDisabled = !canCheck;
@@ -2676,7 +2684,7 @@
                                 return `
                                     <div class="table-cell">
                                         <div class="routine-checkbox ${isCompleted ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}"
-                                             onclick="${isDisabled ? `alert('不能勾选')` : `routineList.toggleCompletion('${routine.id}', '${dateString}')`}"
+                                             onclick="${isDisabled ? `alert('不能勾选此日期')` : `routineList.toggleCompletion('${routine.id}', '${dateString}')`}"
                                         ></div>
                                     </div>
                                 `;
