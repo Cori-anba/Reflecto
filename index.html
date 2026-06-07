@@ -214,22 +214,18 @@
             box-shadow: var(--shadow-md);
         }
 
-        .date-item.today {
-            background-color: rgba(74, 124, 89, 0.1);
-        }
-
         .date-item.active {
-            background-color: var(--color-primary);
+            background-color: rgba(74, 124, 89, 0.15);
             border: 1.5px solid var(--color-primary);
         }
 
         .date-item.active .date-weekday {
-            color: white;
+            color: var(--color-primary);
             font-weight: 600;
         }
 
         .date-item.active .date-day {
-            color: white;
+            color: var(--color-text-primary);
         }
 
         .date-weekday {
@@ -731,6 +727,7 @@
             box-shadow: var(--shadow-lg);
             transform: scale(0.9);
             transition: transform 0.2s ease;
+            min-width: 200px;
         }
 
         .time-picker-modal.active .time-picker-content {
@@ -2004,17 +2001,12 @@
 
                 this.scrollContainer.innerHTML = dates.map(date => {
                     const isActive = this.isSameDay(date, this.selectedDate);
-                    const isToday = this.isSameDay(date, today);
                     const weekday = this.getWeekday(date.getDay());
                     const day = String(date.getDate()).padStart(2, '0');
                     const month = String(date.getMonth() + 1).padStart(2, '0');
 
-                    let className = 'date-item';
-                    if (isActive) className += ' active';
-                    else if (isToday) className += ' today';
-
                     return `
-                        <div class="${className}"
+                        <div class="date-item ${isActive ? 'active' : ''}"
                              data-date="${date.toISOString()}"
                              onclick="datePicker.selectDate('${date.toISOString()}')">
                             <span class="date-weekday">${weekday}</span>
@@ -2611,8 +2603,18 @@
                     `).join('')}
                 `;
 
+                // 获取本周最后一天的结束时间
+                const weekEnd = new Date(dates[6]);
+                weekEnd.setHours(23, 59, 59, 999);
+
+                // 只显示在本周结束之前添加的恒例
+                const validRoutines = this.routines.filter(r => {
+                    const createdDate = new Date(parseInt(r.id));
+                    return createdDate <= weekEnd;
+                });
+
                 // 按时间排序恒例
-                const sortedRoutines = [...this.routines].sort((a, b) => {
+                const sortedRoutines = [...validRoutines].sort((a, b) => {
                     const aTime = a.hour * 60 + a.minute;
                     const bTime = b.hour * 60 + b.minute;
                     return aTime - bTime;
@@ -2622,6 +2624,7 @@
                 const tableContent = document.getElementById('table-content');
                 tableContent.innerHTML = sortedRoutines.map(routine => {
                     const timeStr = `${String(routine.hour).padStart(2, '0')}:${String(routine.minute).padStart(2, '0')}`;
+                    const routineCreatedDate = new Date(parseInt(routine.id));
 
                     return `
                         <div class="table-row" data-id="${routine.id}">
@@ -2641,11 +2644,16 @@
                                 const dateString = this.formatDate(date);
                                 const isCompleted = routine.completions[dateString] || false;
                                 const isFuture = this.isFutureDate(date);
+                                // 检查该恒例是否在该日期之前已添加
+                                const dateEnd = new Date(date);
+                                dateEnd.setHours(23, 59, 59, 999);
+                                const isValidForDate = routineCreatedDate <= dateEnd;
+                                const isDisabled = isFuture || !isValidForDate;
 
                                 return `
                                     <div class="table-cell">
-                                        <div class="routine-checkbox ${isCompleted ? 'checked' : ''} ${isFuture ? 'disabled' : ''}"
-                                             onclick="${isFuture ? `alert('不能勾选未来日期')` : `routineList.toggleCompletion('${routine.id}', '${dateString}')`}"
+                                        <div class="routine-checkbox ${isCompleted ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}"
+                                             onclick="${isDisabled ? `alert('不能勾选')` : `routineList.toggleCompletion('${routine.id}', '${dateString}')`}"
                                         ></div>
                                     </div>
                                 `;
@@ -2660,6 +2668,7 @@
                 const ctx = canvas.getContext('2d');
                 const dates = this.getWeekDates(this.currentWeekStart);
                 const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
+                const routinesLength = this.routines.length;
 
                 // 设置canvas尺寸
                 canvas.width = canvas.parentElement.offsetWidth;
@@ -2667,7 +2676,7 @@
 
                 const completionRates = dates.map(date => {
                     const dateString = this.formatDate(date);
-                    const total = this.routines.length;
+                    const total = routinesLength;
                     if (total === 0) return 0;
                     const completed = this.routines.filter(r => r.completions[dateString]).length;
                     return Math.round((completed / total) * 100);
@@ -2680,6 +2689,8 @@
                 // 动画参数
                 const animationDuration = 500;
                 const startTime = performance.now();
+
+                const self = this;
 
                 function animate(currentTime) {
                     const progress = Math.min((currentTime - startTime) / animationDuration, 1);
@@ -2715,7 +2726,7 @@
                         ctx.fillText(day, x, canvas.height - 10);
                     });
 
-                    if (this.routines.length > 0) {
+                    if (routinesLength > 0) {
                         // 计算动画中的完成率
                         const animatedRates = completionRates.map(rate => rate * easedProgress);
 
@@ -2917,10 +2928,17 @@
                 const dayTodos = todos.filter(t => t.date === dateString);
                 const completedTodos = dayTodos.filter(t => t.completed).length;
 
+                // 只计算在该日期之前已添加的恒例
                 const routines = JSON.parse(localStorage.getItem('reflecto_routines') || '[]');
-                const completedRoutines = routines.filter(r => r.completions[dateString]).length;
+                const dateEnd = new Date(date);
+                dateEnd.setHours(23, 59, 59, 999);
+                const validRoutines = routines.filter(r => {
+                    const createdDate = new Date(parseInt(r.id));
+                    return createdDate <= dateEnd;
+                });
+                const completedRoutines = validRoutines.filter(r => r.completions[dateString]).length;
 
-                const totalTasks = dayTodos.length + routines.length;
+                const totalTasks = dayTodos.length + validRoutines.length;
                 const totalCompleted = completedTodos + completedRoutines;
 
                 if (totalTasks === 0) return 0;
@@ -2938,6 +2956,19 @@
                 const year = this.currentDate.getFullYear();
                 const month = this.currentDate.getMonth();
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const today = new Date();
+
+                // 计算本月已历日期数（含当天）
+                let daysElapsed;
+                if (today.getFullYear() === year && today.getMonth() === month) {
+                    daysElapsed = today.getDate();
+                } else if (today.getFullYear() > year || (today.getFullYear() === year && today.getMonth() > month)) {
+                    // 查看的是过去的月份
+                    daysElapsed = daysInMonth;
+                } else {
+                    // 查看的是未来的月份
+                    daysElapsed = 0;
+                }
 
                 const todos = JSON.parse(localStorage.getItem('reflecto_todos') || '[]');
                 const monthTodos = todos.filter(t => {
@@ -2946,23 +2977,39 @@
                 });
                 const completedTodos = monthTodos.filter(t => t.completed);
 
+                // 获取恒例，只包含在本月及之前添加的恒例
                 const routines = JSON.parse(localStorage.getItem('reflecto_routines') || '[]');
+                const monthStart = new Date(year, month, 1);
+                const monthEnd = new Date(year, month + 1, 0, 23, 59, 59);
+                const validRoutines = routines.filter(r => {
+                    const createdDate = new Date(parseInt(r.id));
+                    return createdDate <= monthEnd;
+                });
 
                 let totalRoutinesCompleted = 0;
                 for (let day = 1; day <= daysInMonth; day++) {
                     const date = new Date(year, month, day);
                     const dateString = this.formatDate(date);
-                    totalRoutinesCompleted += routines.filter(r => r.completions[dateString]).length;
+                    // 只计算在该日期之前已添加的恒例
+                    const dateEnd = new Date(year, month, day, 23, 59, 59);
+                    const routinesForDay = validRoutines.filter(r => {
+                        const createdDate = new Date(parseInt(r.id));
+                        return createdDate <= dateEnd;
+                    });
+                    totalRoutinesCompleted += routinesForDay.filter(r => r.completions[dateString]).length;
                 }
-                const avgRoutines = daysInMonth > 0 ? (totalRoutinesCompleted / daysInMonth).toFixed(1) : 0;
 
-                const totalTasks = monthTodos.length + (routines.length * daysInMonth);
+                // 每日平均完成恒例 = 总完成数 / 已历日期数
+                const avgRoutines = daysElapsed > 0 ? (totalRoutinesCompleted / daysElapsed).toFixed(1) : 0;
+
+                // 月完成度计算（使用本月的恒例数）
+                const totalTasks = monthTodos.length + (validRoutines.length * daysInMonth);
                 const totalCompleted = completedTodos.length + totalRoutinesCompleted;
                 const monthlyCompletion = totalTasks > 0 ? Math.round((totalCompleted / totalTasks) * 100) : 0;
 
                 document.getElementById('stat-todos-added').textContent = `${monthTodos.length} 条`;
                 document.getElementById('stat-todos-completed').textContent = `${completedTodos.length} 条`;
-                document.getElementById('stat-routines-total').textContent = `${routines.length} 条`;
+                document.getElementById('stat-routines-total').textContent = `${validRoutines.length} 条`;
                 document.getElementById('stat-routines-avg').textContent = `${avgRoutines} 条`;
                 document.getElementById('stat-monthly-completion').textContent = `${monthlyCompletion}%`;
             }
